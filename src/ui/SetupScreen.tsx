@@ -53,9 +53,7 @@ export function SetupScreen({ state, t, onRetry, onCancel }: Props) {
     );
   }
 
-  let message = t.loading;
-  if (state.status === 'INDEXING') message = t.indexing(state.done, state.total);
-  else if (state.model) message = t.loadingModel(state.model);
+  const message = state.status === 'INDEXING' ? t.indexing(state.done, state.total) : t.loading;
 
   return (
     <View style={styles.center}>

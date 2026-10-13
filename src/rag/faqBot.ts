@@ -11,13 +11,15 @@ import { DEFAULT_MATCH_SETTINGS, rankFaqs, selectMatch, type MatchSettings } fro
 export type BotDeps = {
   store: FaqStore;
   embedder: Embedder;
-  generator: Generator;
+  /** The optional LLM. null = search only: answers are always the FAQ text. */
+  generator: Generator | null;
   lexical: LexicalIndex;
 };
 
 /**
  * 'faq': show the matched FAQ answer exactly as written (both languages).
  * 'llm': English answers are rewritten by the small LLM; Spanish stays FAQ text (the LLM writes poor Spanish).
+ * Without the LLM downloaded, 'llm' behaves like 'faq'.
  */
 export type AnswerMode = 'faq' | 'llm';
 
@@ -93,7 +95,7 @@ export async function answerQuestion(
   if (!best) return { kind: 'NO_MATCH', lang };
   const source = { ...best, similarity: decision.best.similarity };
 
-  if (mode === 'faq' || lang !== 'en') {
+  if (mode === 'faq' || lang !== 'en' || !deps.generator) {
     return { kind: 'ANSWER', lang, text: best.answer, generated: false, source, related };
   }
 

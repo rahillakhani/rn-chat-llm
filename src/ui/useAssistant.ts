@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { CHAT_MODEL, EMBEDDING_MODEL, REQUIRED_MODELS, type ChatModelSpec } from '../config/models';
+import { CHAT_MODEL, EMBEDDING_MODEL, OPTIONAL_MODELS, REQUIRED_MODELS } from '../config/models';
 import faqJson from '../data/faq.json';
 import { FaqDatasetSchema, type FaqItem } from '../data/faqSchema';
-import type { Lang } from '../i18n/lang';
 import { openFaqStore, type VectorBackend } from '../db/faqStore';
+import type { Lang } from '../i18n/lang';
 import { loadEmbedder, loadGenerator, type Accelerator } from '../llm/engine';
 import {
+  deleteModel,
   deleteUnusedModels,
   downloadModel,
   isModelDownloaded,
@@ -21,62 +22,57 @@ import {
   type BotDeps,
 } from '../rag/faqBot';
 
+/** Search setup: required before the chat screen opens. */
 export type AssistantState =
   | { status: 'DOWNLOADING'; label: string; progress: DownloadProgress }
   | { status: 'PAUSED' }
-  | { status: 'LOADING'; model?: string }
+  | { status: 'LOADING' }
   | { status: 'INDEXING'; done: number; total: number }
-  | {
-      status: 'READY';
-      chatModel: ChatModelSpec;
-      backend: VectorBackend;
-      accelerator: Accelerator;
-      faqCount: number;
-    }
+  | { status: 'READY'; backend: VectorBackend; faqCount: number }
+  | { status: 'ERROR'; message: string };
+
+/** The optional LLM. The chat works in every state; AI features only in READY. */
+export type AiState =
+  | { status: 'NOT_DOWNLOADED' }
+  | { status: 'DOWNLOADING'; progress: DownloadProgress }
+  | { status: 'LOADING' }
+  | { status: 'READY'; label: string; accelerator: Accelerator }
   | { status: 'ERROR'; message: string };
 
 function errorMessage(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
 }
 
-const LOADING_STATE: AssistantState = { status: 'LOADING' };
-
 /**
- * App lifecycle: on launch, download any missing model (first boot only), build the FAQ
- * vector index if needed, load the models, then hand over to the chat screen.
+ * App lifecycle: on launch, download the search model if missing (first boot only), build the FAQ
+ * vector index if needed, and open the chat in search-only mode. If the user has downloaded the
+ * optional LLM, it is loaded in the background and AI features switch on when it is ready.
  */
 export function useAssistant() {
-  const [state, setState] = useState<AssistantState>(LOADING_STATE);
+  const [state, setState] = useState<AssistantState>({ status: 'LOADING' });
+  const [ai, setAi] = useState<AiState>({ status: 'NOT_DOWNLOADED' });
   const runtime = useRef<BotDeps | null>(null);
   const abort = useRef<AbortController | null>(null);
+  const aiAbort = useRef<AbortController | null>(null);
 
-  const loadRuntime = useCallback(async () => {
-    const dataset = FaqDatasetSchema.parse(faqJson);
-    const store = openFaqStore(EMBEDDING_MODEL.dimensions);
-    const embedder = await loadEmbedder(EMBEDDING_MODEL, modelFile(EMBEDDING_MODEL).uri);
-
-    const lexical = await prepareIndex(store, embedder, dataset, EMBEDDING_MODEL, (done, total) =>
-      setState({ status: 'INDEXING', done, total }),
-    );
-
-    setState({ status: 'LOADING', model: CHAT_MODEL.label });
-    const generator = await loadGenerator(CHAT_MODEL, modelFile(CHAT_MODEL).uri);
-
-    runtime.current = { store, embedder, generator, lexical };
-    setState({
-      status: 'READY',
-      chatModel: CHAT_MODEL,
-      backend: store.backend,
-      accelerator: generator.accelerator,
-      faqCount: await store.count(),
-    });
+  const loadAi = useCallback(async () => {
+    const rt = runtime.current;
+    if (!rt) return;
+    setAi({ status: 'LOADING' });
+    try {
+      const generator = await loadGenerator(CHAT_MODEL, modelFile(CHAT_MODEL).uri);
+      rt.generator = generator;
+      setAi({ status: 'READY', label: CHAT_MODEL.label, accelerator: generator.accelerator });
+    } catch (e) {
+      setAi({ status: 'ERROR', message: errorMessage(e) });
+    }
   }, []);
 
   const setup = useCallback(async () => {
     const controller = new AbortController();
     abort.current = controller;
     try {
-      deleteUnusedModels(REQUIRED_MODELS);
+      deleteUnusedModels([...REQUIRED_MODELS, ...OPTIONAL_MODELS]);
       for (const spec of REQUIRED_MODELS.filter((m) => !isModelDownloaded(m))) {
         setState({
           status: 'DOWNLOADING',
@@ -90,8 +86,19 @@ export function useAssistant() {
         );
       }
       abort.current = null;
-      setState(LOADING_STATE);
-      await loadRuntime();
+      setState({ status: 'LOADING' });
+
+      const dataset = FaqDatasetSchema.parse(faqJson);
+      const store = openFaqStore(EMBEDDING_MODEL.dimensions);
+      const embedder = await loadEmbedder(EMBEDDING_MODEL, modelFile(EMBEDDING_MODEL).uri);
+      const lexical = await prepareIndex(store, embedder, dataset, EMBEDDING_MODEL, (done, total) =>
+        setState({ status: 'INDEXING', done, total }),
+      );
+      runtime.current = { store, embedder, generator: null, lexical };
+      setState({ status: 'READY', backend: store.backend, faqCount: await store.count() });
+
+      // Chat is usable now; bring up AI features in the background if the user downloaded them.
+      if (isModelDownloaded(CHAT_MODEL)) void loadAi();
     } catch (e) {
       setState(
         controller.signal.aborted
@@ -101,7 +108,7 @@ export function useAssistant() {
     } finally {
       if (abort.current === controller) abort.current = null;
     }
-  }, [loadRuntime]);
+  }, [loadAi]);
 
   useEffect(() => {
     // Starts the download / native model loading on launch; state updates land after awaits.
@@ -109,14 +116,53 @@ export function useAssistant() {
     void setup();
     return () => {
       abort.current?.abort();
+      aiAbort.current?.abort();
       const rt = runtime.current;
       runtime.current = null;
       void rt?.embedder.release();
-      void rt?.generator.release();
+      void rt?.generator?.release();
     };
   }, [setup]);
 
   const cancelDownload = useCallback(() => abort.current?.abort(), []);
+
+  const downloadAi = useCallback(async () => {
+    const controller = new AbortController();
+    aiAbort.current = controller;
+    try {
+      setAi({
+        status: 'DOWNLOADING',
+        progress: { bytesWritten: 0, totalBytes: CHAT_MODEL.sizeBytes },
+      });
+      await downloadModel(
+        CHAT_MODEL,
+        (progress) => setAi({ status: 'DOWNLOADING', progress }),
+        controller.signal,
+      );
+      aiAbort.current = null;
+      await loadAi();
+    } catch (e) {
+      setAi(
+        controller.signal.aborted
+          ? { status: 'NOT_DOWNLOADED' }
+          : { status: 'ERROR', message: errorMessage(e) },
+      );
+    } finally {
+      if (aiAbort.current === controller) aiAbort.current = null;
+    }
+  }, [loadAi]);
+
+  const cancelAiDownload = useCallback(() => aiAbort.current?.abort(), []);
+
+  /** Back to search only: unload the LLM and delete its file to free the space. */
+  const removeAi = useCallback(async () => {
+    const rt = runtime.current;
+    const generator = rt?.generator;
+    if (rt) rt.generator = null;
+    await generator?.release();
+    deleteModel(CHAT_MODEL);
+    setAi({ status: 'NOT_DOWNLOADED' });
+  }, []);
 
   const ask = useCallback(
     async (
@@ -139,8 +185,19 @@ export function useAssistant() {
   }, []);
 
   const stopGenerating = useCallback(() => {
-    void runtime.current?.generator.stop();
+    void runtime.current?.generator?.stop();
   }, []);
 
-  return { state, retry: setup, cancelDownload, ask, listFaqs, stopGenerating };
+  return {
+    state,
+    ai,
+    retry: setup,
+    cancelDownload,
+    downloadAi,
+    cancelAiDownload,
+    removeAi,
+    ask,
+    listFaqs,
+    stopGenerating,
+  };
 }

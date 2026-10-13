@@ -30,7 +30,8 @@ export const EMBEDDING_MODEL: EmbeddingModelSpec = {
   dimensions: 384,
 };
 
-// The app always uses the lightest chat model. It is downloaded automatically on first launch.
+// Optional chat model for AI features, downloaded only when the user asks for it. The app works
+// without it (search only).
 // Heavier, better-quality alternatives (swap the fields below to try one):
 // - SmolLM2-360M-Instruct Q4_K_M, 271 MB:
 //   https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/main/SmolLM2-360M-Instruct-Q4_K_M.gguf
@@ -45,5 +46,8 @@ export const CHAT_MODEL: ChatModelSpec = {
   contextTokens: 2048,
 };
 
-/** Everything the app downloads on first launch, in order. */
-export const REQUIRED_MODELS: readonly ModelSpec[] = [EMBEDDING_MODEL, CHAT_MODEL];
+/** Downloaded automatically on first launch: enough for search-only answers. */
+export const REQUIRED_MODELS: readonly ModelSpec[] = [EMBEDDING_MODEL];
+
+/** Optional, downloaded only when the user asks for AI features. */
+export const OPTIONAL_MODELS: readonly ModelSpec[] = [CHAT_MODEL];

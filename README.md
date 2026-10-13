@@ -2,18 +2,20 @@
 
 A React Native (Expo SDK 57) chatbot that answers questions from an FAQ dataset stored in a SQLite vector
 database, in **English and Spanish**. Everything runs **on the phone**: no server and no cloud AI API. The AI
-models are **not bundled** in the app. They are downloaded once, right after install, and from then on the
-chatbot works fully offline.
+models are **not bundled** in the app. The search model is downloaded once, right after install, and from then
+on the chatbot works fully offline. An optional small LLM ("AI features") can be downloaded from inside the
+app.
 
 ## 1. How it works
 
-There are two small AI models, both run on the device by [llama.cpp](https://github.com/ggml-org/llama.cpp)
+There are two small AI models (one required, one optional), both run on the device by [llama.cpp](https://github.com/ggml-org/llama.cpp)
 through [`llama.rn`](https://github.com/mybigday/llama.rn):
 
 - a **multilingual embedding model** that turns text into a list of 384 numbers (a vector). Texts with the same
   meaning get similar vectors **even across languages**, so "¿Dónde está mi pedido?" and "Where is my order?"
   land next to each other;
-- a **chat model (the LLM)** that can rewrite English answers in plain language, when **AI** answer mode is on.
+- an **optional chat model (the LLM)** that can rewrite English answers in plain language. It is only on the
+  phone if the user taps **Get AI features**; without it the app is **search only**.
 
 **Setup (once, on first launch):**
 
@@ -38,9 +40,9 @@ through [`llama.rn`](https://github.com/mybigday/llama.rn):
    │      0.50 – 0.56   → "Not sure, is it one of these?" + top 3 questions to tap
    │      < 0.50        → "Sorry, I couldn't find that in our FAQ"
    ▼  6. Answer, in the language of the question:
-          FAQ mode (default) → the FAQ answer exactly as written, English or Spanish
-          AI mode            → English: the LLM rewrites the FAQ answer (FAQ text if it returns nothing)
-                               Spanish: still the FAQ answer as written
+          Search only / FAQ mode → the FAQ answer exactly as written, English or Spanish
+          AI mode (LLM downloaded) → English: the LLM rewrites the FAQ answer (FAQ text if it returns nothing)
+                                     Spanish: still the FAQ answer as written
           + "Did you mean…" buttons for FAQs that scored almost as high
           + the matched FAQ question and its match %
 ```
@@ -48,16 +50,30 @@ through [`llama.rn`](https://github.com/mybigday/llama.rn):
 Answers always come from the FAQ: the LLM only ever sees the one matched FAQ entry, and it is never asked
 when nothing matches. Spanish answers skip the LLM because the lightest model writes poor Spanish.
 
-### Answer mode: FAQ vs AI (testing switch)
+### Search only vs AI features
 
-The **FAQ | AI** switch in the chat header lets testers compare both on the same question. It starts on
-**FAQ** each time the app opens. Each reply is labelled **From FAQ** or **AI-written · may be inaccurate**.
+|                   | Search only (default)               | AI features (after **Get AI features**, 105 MB)                         |
+| ----------------- | ----------------------------------- | ----------------------------------------------------------------------- |
+| Question matching | Vector search + keywords (as above) | The same                                                                |
+| Answers           | FAQ text as written                 | **FAQ \| AI** switch appears: FAQ text, or English rewritten by the LLM |
+| Header            | "Search only"                       | "SmolLM2 135M Instruct · GPU/CPU"                                       |
 
-Why FAQ is the default: SmolLM2-135M was tested on 10 English questions, 3 runs each, with the app's exact
-prompt. Of 30 answers, **11 copied the prompt back** (so one reply looked like several Q&As), **7 invented
-content** such as fake links, and most of the remaining 12 were refusals or wrong ("I don't know how to reset my
-password"). For comparison, Qwen2.5-0.5B (491 MB) produced 30/30 clean answers but sometimes dropped details
-such as prices or steps. Showing the FAQ text as written is the only option that is always complete.
+- A bar under the chat header shows **Search only · Get AI features (105 MB)**, the download progress with
+  **Cancel**, or **Remove AI** once it is installed (deletes the model and goes back to search only).
+- If the LLM is on the phone at launch, the chat opens straight away in search-only mode and AI switches on
+  in the background a few seconds later.
+- The **FAQ | AI** switch starts on **FAQ** each time the app opens. Each reply is labelled **From FAQ** or
+  **AI-written · may be inaccurate**.
+
+Why FAQ text is the default, measured with SmolLM2-135M and the app's exact prompt:
+
+- **Rewriting answers:** on 10 English questions, 3 runs each, **11 of 30** answers copied the prompt back (so
+  one reply looked like several Q&As), **7** invented content such as fake links, and most of the remaining 12
+  were refusals or wrong ("I don't know how to reset my password"). Qwen2.5-0.5B (491 MB) produced 30/30 clean
+  answers, but sometimes dropped details such as prices or steps.
+- **Picking the best FAQ when search is unsure** was also tested and **not shipped**: given the top 3
+  candidates, the 135M model answered "1" (the search's first choice) for 113 of 120 questions, and its picks
+  were right less often than the search alone (86% vs 92% overall, 65% vs 70% when the search was unsure).
 
 ### Languages
 
@@ -100,13 +116,13 @@ LIVE_EMBEDDINGS_URL=http://localhost:8080 npm run eval:retrieval -- --silent=fal
 
 ## 2. Which models we use
 
-| Role       | Model                                                                                                                                    | Download   | Notes                                                       |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----------------------------------------------------------- |
-| Chat LLM   | [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), Q4_K_M GGUF                                         | **105 MB** | Lightest instruct model. Only used in AI mode, English only |
-| Embeddings | [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2), Q4_K_M GGUF | **125 MB** | 384-dim vectors, 50+ languages incl. English and Spanish    |
+| Role       | Model                                                                                                                                    | Download   | Notes                                                    |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------------------------------------------------------- |
+| Chat LLM   | [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), Q4_K_M GGUF                                         | **105 MB** | Optional. Lightest instruct model; AI mode, English only |
+| Embeddings | [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2), Q4_K_M GGUF | **125 MB** | 384-dim vectors, 50+ languages incl. English and Spanish |
 
-- The app always uses **SmolLM2-135M**, the lightest model. There is no model picker: everything is downloaded
-  automatically on first launch.
+- The search model downloads automatically on first launch. **SmolLM2-135M**, the lightest LLM, downloads only
+  when the user taps **Get AI features**.
 - The embedding model is bigger than the old English-only one (25 MB) because it carries a vocabulary for 50+
   languages. Its 4-bit (Q4_K_M) version matched the 8-bit one on the accuracy test and is 7 MB smaller. A
   multilingual-e5-small file was also tested and rejected (it scored 12% in llama.cpp).
@@ -134,32 +150,33 @@ language module add well under 1 MB. Most of it is the llama.cpp engine, which s
 different phone CPUs; the right one is picked at runtime. The app contains the FAQ data but no AI model.
 iOS has not been built yet, so there is no iOS figure.
 
-**Downloaded on first launch** (one time, needs internet):
+**Downloads** (one time each, need internet):
 
-| Chat model (SmolLM2-135M) | + Embedding model (multilingual) | **Total download** |
-| ------------------------- | -------------------------------- | ------------------ |
-| 105 MB                    | 125 MB                           | **230 MB**         |
+| What                                  | When                                    | Size       |
+| ------------------------------------- | --------------------------------------- | ---------- |
+| Search model (multilingual embedding) | Automatically on first launch           | **125 MB** |
+| AI model (SmolLM2-135M), optional     | Only when the user taps Get AI features | 105 MB     |
 
-**Total storage after setup:** ~117 MB app + 230 MB models. The SQLite database itself is small (the FAQs in
+**Total storage:** ~117 MB app + 125 MB search model, plus 105 MB if AI features are added. The SQLite database itself is small (the FAQs in
 two languages and their 454 vectors are under 1 MB). The app checks for free space before downloading and
 shows an error instead of starting if there is not enough room. Model files from older app versions are
 deleted automatically.
 
 ## 4. When the chatbot becomes available
 
-The chat screen is **not usable until the models are downloaded**. The download **starts automatically** the
+The chat screen is **not usable until the search model is downloaded**. The download **starts automatically** the
 first time the app is opened; the user doesn't need to tap anything.
 
-| Step                               | What the user sees                             | Roughly how long                                                      |
-| ---------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
-| 1. Install app and open it         | Download starts by itself                      | —                                                                     |
-| 2. Download the models (230 MB)    | Progress bar with MB and %, and a Pause button | Depends on network: 230 MB is ~40 s at 50 Mbit/s, ~3 min at 10 Mbit/s |
-| 3. Build the FAQ search index      | "Building search index… 120/454"               | Roughly 5–30 s depending on the phone (estimate)                      |
-| 4. Load the chat model into memory | "Loading SmolLM2 135M Instruct…"               | A few seconds (estimate)                                              |
-| 5. **Chatbot ready**               | Chat screen                                    |                                                                       |
+| Step                                  | What the user sees                             | Roughly how long                                                      |
+| ------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
+| 1. Install app and open it            | Download starts by itself                      | —                                                                     |
+| 2. Download the search model (125 MB) | Progress bar with MB and %, and a Pause button | Depends on network: 125 MB is ~20 s at 50 Mbit/s, ~2 min at 10 Mbit/s |
+| 3. Build the FAQ search index         | "Building search index… 120/454"               | Roughly 5–30 s depending on the phone (estimate)                      |
+| 4. **Chatbot ready** (search only)    | Chat screen                                    |                                                                       |
 
-**Every launch after that** skips steps 1–3: the models are already on the phone, so the app loads them
-(a few seconds) and opens straight to chat, **with no internet needed**.
+**Every launch after that** skips steps 1–3: the search model is already on the phone, so the app loads it
+(a few seconds) and opens straight to chat, **with no internet needed**. If AI features were added, the LLM loads
+in the background after the chat opens.
 
 Notes:
 
@@ -169,7 +186,8 @@ Notes:
 - The download starts on any connection, including mobile data. A production app should ask first, or wait
   for Wi-Fi.
 - Step 3 runs again only when the FAQ data or the embedding model changes (see "Changing the FAQ data").
-- The timings for steps 3 and 4 and the answer speed have **not been measured on a real phone yet**.
+- **AI features** download the same way, from the bar under the chat header, while the chat keeps working.
+- The timing for step 3 and the answer speed have **not been measured on a real phone yet**.
 
 ## 5. Testing: the FAQ list
 
@@ -252,9 +270,9 @@ npm run lint && npm run typecheck && npm test && npm run format:check
 
 ## POC limitations / next steps
 
-- In AI mode the 135M LLM is unreliable (see "Answer mode"). If testers settle on FAQ mode, the chat model can
-  be dropped entirely, cutting the first-launch download from 230 MB to 125 MB. If they prefer AI answers,
-  Qwen2.5-0.5B is the smallest model that answered cleanly in testing (download ~615 MB in total).
+- The 135M LLM is unreliable for rewriting answers and for picking between FAQs (see "Search only vs AI
+  features"). If testers prefer AI answers, Qwen2.5-0.5B is the smallest model that answered cleanly in
+  testing (491 MB instead of 105 MB).
 - The thresholds (`src/rag/ranking.ts`) were tuned on 120 test questions; re-tune them on real user
   questions once testers have collected some.
 - Embeddings are computed on the phone at first launch. For large datasets, precompute them at build time

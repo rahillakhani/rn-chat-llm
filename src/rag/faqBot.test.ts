@@ -262,6 +262,25 @@ describe('answerQuestion', () => {
     expect(generator.prompts).toHaveLength(0);
   });
 
+  it('answers with the FAQ text when the LLM is not downloaded, even in AI mode', async () => {
+    const { deps } = await setup();
+
+    const answer = await answerQuestion(
+      'i lost my password',
+      'en',
+      'llm',
+      { ...deps, generator: null },
+      () => {},
+      settings,
+    );
+
+    expect(answer).toMatchObject({
+      kind: 'ANSWER',
+      generated: false,
+      text: 'Tap Forgot password.',
+    });
+  });
+
   it('falls back to the FAQ answer when the LLM returns nothing', async () => {
     const { deps } = await setup('<|im_end|>');
     const answer = await answerQuestion(

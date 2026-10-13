@@ -11,7 +11,18 @@ import { colors } from './src/ui/theme';
 import { useAssistant } from './src/ui/useAssistant';
 
 export default function App() {
-  const { state, retry, cancelDownload, ask, listFaqs, stopGenerating } = useAssistant();
+  const {
+    state,
+    ai,
+    retry,
+    cancelDownload,
+    downloadAi,
+    cancelAiDownload,
+    removeAi,
+    ask,
+    listFaqs,
+    stopGenerating,
+  } = useAssistant();
   // UI language starts from the phone's language and can be switched in the chat header.
   // Answers follow the language the question is written in.
   const [lang, setLang] = useState<Lang>(deviceLang);
@@ -30,6 +41,10 @@ export default function App() {
             ask={ask}
             listFaqs={listFaqs}
             onStop={stopGenerating}
+            ai={ai}
+            onDownloadAi={() => void downloadAi()}
+            onCancelAiDownload={cancelAiDownload}
+            onRemoveAi={() => void removeAi()}
           />
         ) : (
           <SetupScreen state={state} t={t} onRetry={() => void retry()} onCancel={cancelDownload} />

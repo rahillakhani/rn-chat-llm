@@ -10,14 +10,16 @@ import {
   View,
 } from 'react-native';
 
+import { CHAT_MODEL } from '../config/models';
 import type { FaqItem } from '../data/faqSchema';
 import type { Lang } from '../i18n/lang';
 import { STRINGS, type Strings } from '../i18n/strings';
+import { formatBytes } from '../models/modelFiles';
 import type { AnswerMode, BotAnswer } from '../rag/faqBot';
 import { FaqListModal } from './FaqListModal';
 import { SegmentedToggle } from './SegmentedToggle';
 import { colors } from './theme';
-import type { AssistantState } from './useAssistant';
+import type { AiState, AssistantState } from './useAssistant';
 
 type BotMessage = {
   id: string;
@@ -49,15 +51,34 @@ type Props = {
   ) => Promise<BotAnswer>;
   listFaqs: (lang: Lang) => Promise<FaqItem[]>;
   onStop: () => void;
+  ai: AiState;
+  onDownloadAi: () => void;
+  onCancelAiDownload: () => void;
+  onRemoveAi: () => void;
 };
 
-export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop }: Props) {
+export function ChatScreen({
+  state,
+  lang,
+  t,
+  onChangeLang,
+  ask,
+  listFaqs,
+  onStop,
+  ai,
+  onDownloadAi,
+  onCancelAiDownload,
+  onRemoveAi,
+}: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [showFaqs, setShowFaqs] = useState(false);
   // Testing switch: compare FAQ-as-written answers with LLM-rewritten ones on the same question.
   const [mode, setMode] = useState<AnswerMode>('faq');
+  const aiReady = ai.status === 'READY';
+  // Without the LLM the app is search only, whatever the switch was last set to.
+  const effectiveMode: AnswerMode = aiReady ? mode : 'faq';
   const nextId = useRef(0);
   const listRef = useRef<FlatList<Message>>(null);
 
@@ -81,7 +102,7 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
         { id: botId, role: 'bot', text: '', pending: true, lang, related: [] },
       ]);
       try {
-        const answer = await ask(question, lang, mode, (partial) =>
+        const answer = await ask(question, lang, effectiveMode, (partial) =>
           updateBot(botId, { text: partial }),
         );
         updateBot(
@@ -114,7 +135,7 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
         setBusy(false);
       }
     },
-    [ask, busy, lang, mode, t, updateBot],
+    [ask, busy, lang, effectiveMode, t, updateBot],
   );
 
   return (
@@ -126,8 +147,8 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
         <View style={styles.flex}>
           <Text style={styles.headerTitle}>{t.chatTitle}</Text>
           <Text style={styles.headerSub}>
-            {state.chatModel.label} · {state.accelerator.kind} · {state.faqCount} FAQs ·{' '}
-            {state.backend}
+            {ai.status === 'READY' ? `${ai.label} · ${ai.accelerator.kind}` : t.searchOnly} ·{' '}
+            {state.faqCount} FAQs · {state.backend}
           </Text>
         </View>
         <View style={styles.headerActions}>
@@ -140,20 +161,31 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
             value={lang}
             onChange={onChangeLang}
           />
-          <SegmentedToggle
-            accessibilityLabel={t.answerModeToggle}
-            options={[
-              { value: 'faq', label: t.modeFaq },
-              { value: 'llm', label: t.modeAi },
-            ]}
-            value={mode}
-            onChange={setMode}
-          />
+          {aiReady && (
+            <SegmentedToggle
+              accessibilityLabel={t.answerModeToggle}
+              options={[
+                { value: 'faq', label: t.modeFaq },
+                { value: 'llm', label: t.modeAi },
+              ]}
+              value={mode}
+              onChange={setMode}
+            />
+          )}
           <Pressable onPress={() => setShowFaqs(true)} accessibilityRole="button">
             <Text style={styles.link}>{t.faqList}</Text>
           </Pressable>
         </View>
       </View>
+
+      <AiBar
+        ai={ai}
+        t={t}
+        busy={busy}
+        onDownload={onDownloadAi}
+        onCancel={onCancelAiDownload}
+        onRemove={onRemoveAi}
+      />
 
       <FaqListModal
         visible={showFaqs}
@@ -260,6 +292,61 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
   );
 }
 
+/** Optional AI model: offer it, show its download, or let testers remove it again. */
+function AiBar({
+  ai,
+  t,
+  busy,
+  onDownload,
+  onCancel,
+  onRemove,
+}: {
+  ai: AiState;
+  t: Strings;
+  busy: boolean;
+  onDownload: () => void;
+  onCancel: () => void;
+  onRemove: () => void;
+}) {
+  let text: string;
+  let action: { label: string; onPress: () => void } | undefined;
+  switch (ai.status) {
+    case 'NOT_DOWNLOADED':
+      text = t.searchOnly;
+      action = { label: t.aiGet(formatBytes(CHAT_MODEL.sizeBytes)), onPress: onDownload };
+      break;
+    case 'DOWNLOADING': {
+      const { bytesWritten, totalBytes } = ai.progress;
+      text = t.aiDownloading(totalBytes > 0 ? Math.round((bytesWritten / totalBytes) * 100) : 0);
+      action = { label: t.cancel, onPress: onCancel };
+      break;
+    }
+    case 'LOADING':
+      text = t.aiLoading;
+      break;
+    case 'READY':
+      text = `${ai.label} · ${ai.accelerator.kind}`;
+      if (!busy) action = { label: t.aiRemove, onPress: onRemove };
+      break;
+    case 'ERROR':
+      text = t.aiFailed(ai.message);
+      action = { label: t.tryAgain, onPress: onDownload };
+      break;
+  }
+  return (
+    <View style={styles.aiBar}>
+      <Text style={styles.aiBarText} numberOfLines={2}>
+        {text}
+      </Text>
+      {action && (
+        <Pressable onPress={action.onPress} accessibilityRole="button">
+          <Text style={styles.link}>{action?.label}</Text>
+        </Pressable>
+      )}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   header: {
@@ -273,6 +360,17 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: '700', color: colors.text },
   headerSub: { fontSize: 12, color: colors.muted },
+  aiBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: colors.bg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  aiBarText: { flex: 1, fontSize: 12, color: colors.muted },
   headerActions: { alignItems: 'flex-end', gap: 6 },
   link: { color: colors.primary, fontSize: 14 },
   list: { padding: 16, gap: 10, flexGrow: 1 },

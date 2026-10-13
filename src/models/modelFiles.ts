@@ -46,6 +46,11 @@ export async function downloadModel(
   });
 }
 
+export function deleteModel(spec: ModelSpec): void {
+  const file = modelFile(spec);
+  if (file.exists) file.delete();
+}
+
 /** Delete model files left over from earlier app versions (e.g. a replaced embedding model). */
 export function deleteUnusedModels(keep: readonly ModelSpec[]): void {
   const keepNames = new Set(keep.map((m) => m.fileName));
