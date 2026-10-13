@@ -46,6 +46,14 @@ export async function downloadModel(
   });
 }
 
+/** Delete model files left over from earlier app versions (e.g. a replaced embedding model). */
+export function deleteUnusedModels(keep: readonly ModelSpec[]): void {
+  const keepNames = new Set(keep.map((m) => m.fileName));
+  for (const entry of modelsDir().list()) {
+    if (entry instanceof File && !keepNames.has(entry.name)) entry.delete();
+  }
+}
+
 export function formatBytes(bytes: number): string {
   if (bytes >= 1e9) return `${(bytes / 1e9).toFixed(2)} GB`;
   if (bytes >= 1e6) return `${(bytes / 1e6).toFixed(0)} MB`;

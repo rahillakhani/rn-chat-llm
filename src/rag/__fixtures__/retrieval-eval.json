@@ -1,0 +1,605 @@
+{
+  "source": "Hand-written held-out questions (2026-10-13). Worded differently from the FAQ questions and alternates. expectedId null = off-topic, should get no answer.",
+  "cases": [
+    {
+      "query": "new here, how do i make a profile",
+      "lang": "en",
+      "expectedId": 1
+    },
+    {
+      "query": "soy nuevo, como hago un perfil",
+      "lang": "es",
+      "expectedId": 1
+    },
+    {
+      "query": "locked out, need a new password",
+      "lang": "en",
+      "expectedId": 2
+    },
+    {
+      "query": "no me acuerdo de la clave para entrar",
+      "lang": "es",
+      "expectedId": 2
+    },
+    {
+      "query": "switch the email linked to my login",
+      "lang": "en",
+      "expectedId": 3
+    },
+    {
+      "query": "quiero poner otra direccion de email en mi perfil",
+      "lang": "es",
+      "expectedId": 3
+    },
+    {
+      "query": "please erase my profile and all my info",
+      "lang": "en",
+      "expectedId": 4
+    },
+    {
+      "query": "dar de baja mi cuenta definitivamente",
+      "lang": "es",
+      "expectedId": 4
+    },
+    {
+      "query": "set up two step login with codes",
+      "lang": "en",
+      "expectedId": 5
+    },
+    {
+      "query": "quiero codigos de seguridad al iniciar sesion",
+      "lang": "es",
+      "expectedId": 5
+    },
+    {
+      "query": "track parcel status",
+      "lang": "en",
+      "expectedId": 6
+    },
+    {
+      "query": "seguimiento del paquete",
+      "lang": "es",
+      "expectedId": 6
+    },
+    {
+      "query": "stop my order before it ships",
+      "lang": "en",
+      "expectedId": 7
+    },
+    {
+      "query": "anular la compra que acabo de hacer",
+      "lang": "es",
+      "expectedId": 7
+    },
+    {
+      "query": "update the delivery address on my purchase",
+      "lang": "en",
+      "expectedId": 8
+    },
+    {
+      "query": "me equivoque de direccion en el pedido",
+      "lang": "es",
+      "expectedId": 8
+    },
+    {
+      "query": "my stuff is taking forever to come",
+      "lang": "en",
+      "expectedId": 9
+    },
+    {
+      "query": "el pedido no llega y ya pasaron muchos dias",
+      "lang": "es",
+      "expectedId": 9
+    },
+    {
+      "query": "delivery time for standard shipping",
+      "lang": "en",
+      "expectedId": 10
+    },
+    {
+      "query": "en cuanto tiempo llega un envio normal",
+      "lang": "es",
+      "expectedId": 10
+    },
+    {
+      "query": "what do you charge for delivery",
+      "lang": "en",
+      "expectedId": 11
+    },
+    {
+      "query": "precio del envio",
+      "lang": "es",
+      "expectedId": 11
+    },
+    {
+      "query": "do you send orders to Mexico",
+      "lang": "en",
+      "expectedId": 12
+    },
+    {
+      "query": "mandan pedidos fuera del pais",
+      "lang": "es",
+      "expectedId": 12
+    },
+    {
+      "query": "what are the rules for returning stuff",
+      "lang": "en",
+      "expectedId": 13
+    },
+    {
+      "query": "politica para devolver productos",
+      "lang": "es",
+      "expectedId": 13
+    },
+    {
+      "query": "steps to return a product",
+      "lang": "en",
+      "expectedId": 14
+    },
+    {
+      "query": "pasos para hacer una devolucion",
+      "lang": "es",
+      "expectedId": 14
+    },
+    {
+      "query": "refund still not in my bank account",
+      "lang": "en",
+      "expectedId": 15
+    },
+    {
+      "query": "cuando me reembolsan el dinero",
+      "lang": "es",
+      "expectedId": 15
+    },
+    {
+      "query": "shoes too small, want a different size",
+      "lang": "en",
+      "expectedId": 16
+    },
+    {
+      "query": "cambiar una camiseta por otra talla",
+      "lang": "es",
+      "expectedId": 16
+    },
+    {
+      "query": "payment options available",
+      "lang": "en",
+      "expectedId": 17
+    },
+    {
+      "query": "formas de pago",
+      "lang": "es",
+      "expectedId": 17
+    },
+    {
+      "query": "is saving card details in the app safe",
+      "lang": "en",
+      "expectedId": 18
+    },
+    {
+      "query": "es seguro dejar la tarjeta guardada",
+      "lang": "es",
+      "expectedId": 18
+    },
+    {
+      "query": "transaction got rejected",
+      "lang": "en",
+      "expectedId": 19
+    },
+    {
+      "query": "mi pago fue rechazado",
+      "lang": "es",
+      "expectedId": 19
+    },
+    {
+      "query": "pay in 4 installments",
+      "lang": "en",
+      "expectedId": 20
+    },
+    {
+      "query": "pagar en cuotas",
+      "lang": "es",
+      "expectedId": 20
+    },
+    {
+      "query": "how to apply a voucher at checkout",
+      "lang": "en",
+      "expectedId": 21
+    },
+    {
+      "query": "donde meto el codigo promo",
+      "lang": "es",
+      "expectedId": 21
+    },
+    {
+      "query": "explain the loyalty points",
+      "lang": "en",
+      "expectedId": 22
+    },
+    {
+      "query": "como funcionan los puntos de fidelidad",
+      "lang": "es",
+      "expectedId": 22
+    },
+    {
+      "query": "check my reward balance",
+      "lang": "en",
+      "expectedId": 23
+    },
+    {
+      "query": "ver mis puntos",
+      "lang": "es",
+      "expectedId": 23
+    },
+    {
+      "query": "turn off alerts",
+      "lang": "en",
+      "expectedId": 24
+    },
+    {
+      "query": "desactivar avisos de la app",
+      "lang": "es",
+      "expectedId": 24
+    },
+    {
+      "query": "use the app with no connection",
+      "lang": "en",
+      "expectedId": 25
+    },
+    {
+      "query": "funciona la app offline",
+      "lang": "es",
+      "expectedId": 25
+    },
+    {
+      "query": "night mode",
+      "lang": "en",
+      "expectedId": 26
+    },
+    {
+      "query": "poner la app en negro",
+      "lang": "es",
+      "expectedId": 26
+    },
+    {
+      "query": "app keeps closing on me",
+      "lang": "en",
+      "expectedId": 27
+    },
+    {
+      "query": "la aplicacion se cierra todo el rato",
+      "lang": "es",
+      "expectedId": 27
+    },
+    {
+      "query": "privacy, what data do you keep",
+      "lang": "en",
+      "expectedId": 28
+    },
+    {
+      "query": "que informacion personal guardan",
+      "lang": "es",
+      "expectedId": 28
+    },
+    {
+      "query": "request a download of my personal data",
+      "lang": "en",
+      "expectedId": 29
+    },
+    {
+      "query": "descargar mis datos personales",
+      "lang": "es",
+      "expectedId": 29
+    },
+    {
+      "query": "contact customer service",
+      "lang": "en",
+      "expectedId": 30
+    },
+    {
+      "query": "hablar con soporte",
+      "lang": "es",
+      "expectedId": 30
+    },
+    {
+      "query": "package came damaged",
+      "lang": "en",
+      "expectedId": 31
+    },
+    {
+      "query": "me llego un producto roto",
+      "lang": "es",
+      "expectedId": 31
+    },
+    {
+      "query": "gift card expiration",
+      "lang": "en",
+      "expectedId": 32
+    },
+    {
+      "query": "las tarjetas de regalo vencen",
+      "lang": "es",
+      "expectedId": 32
+    },
+    {
+      "query": "buy online pick up in store",
+      "lang": "en",
+      "expectedId": 33
+    },
+    {
+      "query": "recoger el pedido en la tienda",
+      "lang": "es",
+      "expectedId": 33
+    },
+    {
+      "query": "how long will you hold my pickup",
+      "lang": "en",
+      "expectedId": 34
+    },
+    {
+      "query": "cuanto tiempo guardan el pedido para recoger",
+      "lang": "es",
+      "expectedId": 34
+    },
+    {
+      "query": "what to bring when collecting my order",
+      "lang": "en",
+      "expectedId": 35
+    },
+    {
+      "query": "que llevo para recoger un pedido",
+      "lang": "es",
+      "expectedId": 35
+    },
+    {
+      "query": "what do I get with acme plus",
+      "lang": "en",
+      "expectedId": 36
+    },
+    {
+      "query": "que incluye acme plus",
+      "lang": "es",
+      "expectedId": 36
+    },
+    {
+      "query": "cancel acme plus",
+      "lang": "en",
+      "expectedId": 37
+    },
+    {
+      "query": "cancelar la suscripcion plus",
+      "lang": "es",
+      "expectedId": 37
+    },
+    {
+      "query": "free trial for the membership",
+      "lang": "en",
+      "expectedId": 38
+    },
+    {
+      "query": "prueba gratis de acme plus",
+      "lang": "es",
+      "expectedId": 38
+    },
+    {
+      "query": "warranty on electronics",
+      "lang": "en",
+      "expectedId": 39
+    },
+    {
+      "query": "garantia de los productos",
+      "lang": "es",
+      "expectedId": 39
+    },
+    {
+      "query": "file a warranty claim",
+      "lang": "en",
+      "expectedId": 40
+    },
+    {
+      "query": "reclamar la garantia",
+      "lang": "es",
+      "expectedId": 40
+    },
+    {
+      "query": "size guide",
+      "lang": "en",
+      "expectedId": 41
+    },
+    {
+      "query": "guia de tallas",
+      "lang": "es",
+      "expectedId": 41
+    },
+    {
+      "query": "notify me when back in stock",
+      "lang": "en",
+      "expectedId": 42
+    },
+    {
+      "query": "avisarme cuando haya stock",
+      "lang": "es",
+      "expectedId": 42
+    },
+    {
+      "query": "price match",
+      "lang": "en",
+      "expectedId": 43
+    },
+    {
+      "query": "igualan el precio de otra tienda",
+      "lang": "es",
+      "expectedId": 43
+    },
+    {
+      "query": "add to wishlist",
+      "lang": "en",
+      "expectedId": 44
+    },
+    {
+      "query": "guardar productos en favoritos",
+      "lang": "es",
+      "expectedId": 44
+    },
+    {
+      "query": "purchase a gift card",
+      "lang": "en",
+      "expectedId": 45
+    },
+    {
+      "query": "comprar tarjeta regalo",
+      "lang": "es",
+      "expectedId": 45
+    },
+    {
+      "query": "use two gift cards on one order",
+      "lang": "en",
+      "expectedId": 46
+    },
+    {
+      "query": "usar varias tarjetas regalo en una compra",
+      "lang": "es",
+      "expectedId": 46
+    },
+    {
+      "query": "add an item to an existing order",
+      "lang": "en",
+      "expectedId": 47
+    },
+    {
+      "query": "agregar un producto a un pedido ya hecho",
+      "lang": "es",
+      "expectedId": 47
+    },
+    {
+      "query": "download invoice pdf",
+      "lang": "en",
+      "expectedId": 48
+    },
+    {
+      "query": "descargar la factura",
+      "lang": "es",
+      "expectedId": 48
+    },
+    {
+      "query": "cash on delivery",
+      "lang": "en",
+      "expectedId": 49
+    },
+    {
+      "query": "pago contra entrega",
+      "lang": "es",
+      "expectedId": 49
+    },
+    {
+      "query": "share account with family",
+      "lang": "en",
+      "expectedId": 50
+    },
+    {
+      "query": "compartir la cuenta con mi familia",
+      "lang": "es",
+      "expectedId": 50
+    },
+    {
+      "query": "which android version do I need",
+      "lang": "en",
+      "expectedId": 51
+    },
+    {
+      "query": "que version de iphone necesito",
+      "lang": "es",
+      "expectedId": 51
+    },
+    {
+      "query": "talkback support",
+      "lang": "en",
+      "expectedId": 52
+    },
+    {
+      "query": "accesibilidad lector de pantalla",
+      "lang": "es",
+      "expectedId": 52
+    },
+    {
+      "query": "what's the weather tomorrow",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "que tiempo hace manana",
+      "lang": "es",
+      "expectedId": null
+    },
+    {
+      "query": "tell me a joke",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "cuentame un chiste",
+      "lang": "es",
+      "expectedId": null
+    },
+    {
+      "query": "who won the football game last night",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "quien gano el partido de futbol",
+      "lang": "es",
+      "expectedId": null
+    },
+    {
+      "query": "how do I cook pasta",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "como se cocina el arroz",
+      "lang": "es",
+      "expectedId": null
+    },
+    {
+      "query": "what is the capital of France",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "cual es la capital de Francia",
+      "lang": "es",
+      "expectedId": null
+    },
+    {
+      "query": "recommend a good movie",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "recomiendame una pelicula",
+      "lang": "es",
+      "expectedId": null
+    },
+    {
+      "query": "what time is it",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "que hora es",
+      "lang": "es",
+      "expectedId": null
+    },
+    {
+      "query": "translate hello to german",
+      "lang": "en",
+      "expectedId": null
+    },
+    {
+      "query": "traduce hola al aleman",
+      "lang": "es",
+      "expectedId": null
+    }
+  ]
+}

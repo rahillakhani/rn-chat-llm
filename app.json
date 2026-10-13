@@ -31,7 +31,8 @@
         {
           "enableOpenCLAndHexagon": true
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "scheme": "rnchatllm"
   }

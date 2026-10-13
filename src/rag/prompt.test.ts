@@ -5,7 +5,7 @@ import { buildRagMessages, sanitizeAnswer } from './prompt';
 describe('buildRagMessages', () => {
   it('puts FAQ text in a delimited block in the user turn, not the system prompt', () => {
     const messages = buildRagMessages('  how do refunds work? ', [
-      { id: 1, category: 'Returns', question: 'Refund?', answer: 'In 5 days.', similarity: 0.9 },
+      { question: 'Refund?', answer: 'In 5 days.' },
     ]);
     expect(messages.map((m) => m.role)).toEqual(['system', 'user']);
     expect(messages[0]?.content).not.toContain('In 5 days.');

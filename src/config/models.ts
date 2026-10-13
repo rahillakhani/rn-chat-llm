@@ -17,13 +17,16 @@ export type EmbeddingModelSpec = ModelSpec & {
   dimensions: number;
 };
 
-// all-MiniLM-L6-v2: tiny (25 MB) sentence-embedding model, 384-dim vectors.
+// paraphrase-multilingual-MiniLM-L12-v2: maps English and Spanish (and ~50 other languages) into the
+// same 384-dim space, so a question matches its FAQ in either language. Chosen by measurement on
+// src/rag/__fixtures__/retrieval-eval.json: Q4_K_M scored the same as Q8_0 and is 7 MB smaller.
+// Most of its size is the multilingual vocabulary, so heavier quantization barely shrinks it.
 export const EMBEDDING_MODEL: EmbeddingModelSpec = {
-  id: 'all-minilm-l6-v2-q8',
-  label: 'all-MiniLM-L6-v2 (embeddings)',
-  fileName: 'all-MiniLM-L6-v2-Q8_0.gguf',
-  url: 'https://huggingface.co/second-state/All-MiniLM-L6-v2-Embedding-GGUF/resolve/main/all-MiniLM-L6-v2-Q8_0.gguf',
-  sizeBytes: 25_008_064,
+  id: 'paraphrase-multilingual-minilm-l12-v2-q4km',
+  label: 'Multilingual MiniLM (search)',
+  fileName: 'paraphrase-multilingual-MiniLM-L12-118M-v2-Q4_K_M.gguf',
+  url: 'https://huggingface.co/mykor/paraphrase-multilingual-MiniLM-L12-v2.gguf/resolve/main/paraphrase-multilingual-MiniLM-L12-118M-v2-Q4_K_M.gguf',
+  sizeBytes: 124_835_104,
   dimensions: 384,
 };
 

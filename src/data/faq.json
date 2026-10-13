@@ -1,317 +1,1091 @@
 {
-  "version": 2,
+  "version": 3,
   "items": [
     {
       "id": 1,
-      "category": "Account",
-      "question": "How do I create an account?",
-      "answer": "Tap 'Sign up' on the welcome screen, enter your email address and a password of at least 8 characters, then confirm the 6-digit code we email you."
+      "category": {
+        "en": "Account",
+        "es": "Cuenta"
+      },
+      "en": {
+        "question": "How do I create an account?",
+        "answer": "Tap 'Sign up' on the welcome screen, enter your email address and a password of at least 8 characters, then confirm the 6-digit code we email you.",
+        "alternates": [
+          "How do I sign up?",
+          "I want to register a new account",
+          "How can I open an account in the app?"
+        ]
+      },
+      "es": {
+        "question": "¿Cómo creo una cuenta?",
+        "answer": "Toca 'Registrarse' en la pantalla de bienvenida, introduce tu correo electrónico y una contraseña de al menos 8 caracteres, y confirma el código de 6 dígitos que te enviamos por correo.",
+        "alternates": [
+          "¿Cómo me registro?",
+          "Quiero abrir una cuenta nueva",
+          "¿Cómo me doy de alta en la app?"
+        ]
+      }
     },
     {
       "id": 2,
-      "category": "Account",
-      "question": "How do I reset my password?",
-      "answer": "On the login screen tap 'Forgot password', enter your registered email, and follow the reset link we send. The link expires after 30 minutes."
+      "category": {
+        "en": "Account",
+        "es": "Cuenta"
+      },
+      "en": {
+        "question": "How do I reset my password?",
+        "answer": "On the login screen tap 'Forgot password', enter your registered email, and follow the reset link we send. The link expires after 30 minutes.",
+        "alternates": [
+          "I forgot my password",
+          "I can't log in because I don't remember my password",
+          "How do I change my password?"
+        ]
+      },
+      "es": {
+        "question": "¿Cómo restablezco mi contraseña?",
+        "answer": "En la pantalla de inicio de sesión toca '¿Olvidaste tu contraseña?', introduce tu correo registrado y sigue el enlace que te enviamos. El enlace caduca a los 30 minutos.",
+        "alternates": [
+          "Olvidé mi contraseña",
+          "No puedo iniciar sesión, no recuerdo la contraseña",
+          "¿Cómo cambio mi contraseña?"
+        ]
+      }
     },
     {
       "id": 3,
-      "category": "Account",
-      "question": "Can I change the email address on my account?",
-      "answer": "Yes. Go to Profile > Account settings > Email, enter the new address, and confirm it with the verification code sent to that address."
+      "category": {
+        "en": "Account",
+        "es": "Cuenta"
+      },
+      "en": {
+        "question": "Can I change the email address on my account?",
+        "answer": "Yes. Go to Profile > Account settings > Email, enter the new address, and confirm it with the verification code sent to that address.",
+        "alternates": [
+          "How do I update my email address?",
+          "I want to use a different email for my account"
+        ]
+      },
+      "es": {
+        "question": "¿Puedo cambiar el correo electrónico de mi cuenta?",
+        "answer": "Sí. Ve a Perfil > Ajustes de la cuenta > Correo, introduce la nueva dirección y confírmala con el código de verificación que te enviamos a esa dirección.",
+        "alternates": ["¿Cómo actualizo mi correo?", "Quiero usar otro email en mi cuenta"]
+      }
     },
     {
       "id": 4,
-      "category": "Account",
-      "question": "How do I delete my account?",
-      "answer": "Go to Profile > Account settings > Delete account. Deletion is permanent after a 14-day grace period, during which you can log in to cancel it."
+      "category": {
+        "en": "Account",
+        "es": "Cuenta"
+      },
+      "en": {
+        "question": "How do I delete my account?",
+        "answer": "Go to Profile > Account settings > Delete account. Deletion is permanent after a 14-day grace period, during which you can log in to cancel it.",
+        "alternates": ["How do I close my account?", "I want to remove my account permanently"]
+      },
+      "es": {
+        "question": "¿Cómo elimino mi cuenta?",
+        "answer": "Ve a Perfil > Ajustes de la cuenta > Eliminar cuenta. La eliminación es definitiva tras un periodo de gracia de 14 días, durante el cual puedes iniciar sesión para cancelarla.",
+        "alternates": ["¿Cómo cierro mi cuenta?", "Quiero borrar mi cuenta para siempre"]
+      }
     },
     {
       "id": 5,
-      "category": "Account",
-      "question": "How do I turn on two-factor authentication?",
-      "answer": "Open Profile > Security > Two-factor authentication and choose either an authenticator app or SMS codes. We recommend an authenticator app."
+      "category": {
+        "en": "Account",
+        "es": "Cuenta"
+      },
+      "en": {
+        "question": "How do I turn on two-factor authentication?",
+        "answer": "Open Profile > Security > Two-factor authentication and choose either an authenticator app or SMS codes. We recommend an authenticator app.",
+        "alternates": [
+          "How do I enable 2FA?",
+          "How can I make my account more secure?",
+          "Can I use an authenticator app to log in?"
+        ]
+      },
+      "es": {
+        "question": "¿Cómo activo la verificación en dos pasos?",
+        "answer": "Abre Perfil > Seguridad > Verificación en dos pasos y elige una app de autenticación o códigos por SMS. Recomendamos una app de autenticación.",
+        "alternates": [
+          "¿Cómo activo el 2FA?",
+          "¿Cómo hago mi cuenta más segura?",
+          "¿Puedo usar una app de autenticación?"
+        ]
+      }
     },
     {
       "id": 6,
-      "category": "Orders",
-      "question": "How can I track my order?",
-      "answer": "Open Orders, select the order, and tap 'Track shipment'. Tracking becomes available once the order has shipped, usually within 1 business day."
+      "category": {
+        "en": "Orders",
+        "es": "Pedidos"
+      },
+      "en": {
+        "question": "How can I track my order?",
+        "answer": "Open Orders, select the order, and tap 'Track shipment'. Tracking becomes available once the order has shipped, usually within 1 business day.",
+        "alternates": [
+          "Where is my order?",
+          "Where is my package right now?",
+          "How do I see the tracking number?"
+        ]
+      },
+      "es": {
+        "question": "¿Cómo puedo seguir mi pedido?",
+        "answer": "Abre Pedidos, selecciona el pedido y toca 'Seguir envío'. El seguimiento está disponible cuando el pedido se ha enviado, normalmente en 1 día hábil.",
+        "alternates": [
+          "¿Dónde está mi pedido?",
+          "¿Dónde está mi paquete ahora mismo?",
+          "¿Cómo veo el número de seguimiento?"
+        ]
+      }
     },
     {
       "id": 7,
-      "category": "Orders",
-      "question": "Can I cancel an order after placing it?",
-      "answer": "You can cancel an order from the Orders screen until it has shipped. Once shipped, you will need to request a return instead."
+      "category": {
+        "en": "Orders",
+        "es": "Pedidos"
+      },
+      "en": {
+        "question": "Can I cancel an order after placing it?",
+        "answer": "You can cancel an order from the Orders screen until it has shipped. Once shipped, you will need to request a return instead.",
+        "alternates": ["How do I cancel my order?", "I ordered by mistake, can I cancel it?"]
+      },
+      "es": {
+        "question": "¿Puedo cancelar un pedido después de hacerlo?",
+        "answer": "Puedes cancelar un pedido desde la pantalla Pedidos mientras no se haya enviado. Una vez enviado, tendrás que solicitar una devolución.",
+        "alternates": ["¿Cómo cancelo mi pedido?", "Pedí algo por error, ¿puedo cancelarlo?"]
+      }
     },
     {
       "id": 8,
-      "category": "Orders",
-      "question": "Can I change the delivery address of an order?",
-      "answer": "Delivery addresses can be changed from the order details screen only before the order ships. After shipping, contact support and we will try to redirect it with the carrier."
+      "category": {
+        "en": "Orders",
+        "es": "Pedidos"
+      },
+      "en": {
+        "question": "Can I change the delivery address of an order?",
+        "answer": "Delivery addresses can be changed from the order details screen only before the order ships. After shipping, contact support and we will try to redirect it with the carrier.",
+        "alternates": [
+          "I entered the wrong shipping address",
+          "How do I change where my order is delivered?"
+        ]
+      },
+      "es": {
+        "question": "¿Puedo cambiar la dirección de entrega de un pedido?",
+        "answer": "La dirección de entrega se puede cambiar desde los detalles del pedido solo antes del envío. Después del envío, contacta con soporte e intentaremos redirigirlo con la empresa de transporte.",
+        "alternates": ["Puse mal la dirección de envío", "¿Cómo cambio dónde se entrega mi pedido?"]
+      }
     },
     {
       "id": 9,
-      "category": "Orders",
-      "question": "Why is my order delayed?",
-      "answer": "Delays are usually caused by carrier backlogs, weather, or address verification issues. Check the tracking page for the latest status; if there has been no update for 5 business days, contact support."
+      "category": {
+        "en": "Orders",
+        "es": "Pedidos"
+      },
+      "en": {
+        "question": "Why is my order delayed?",
+        "answer": "Delays are usually caused by carrier backlogs, weather, or address verification issues. Check the tracking page for the latest status; if there has been no update for 5 business days, contact support.",
+        "alternates": [
+          "My order is late",
+          "My package hasn't arrived yet",
+          "Why is my delivery taking so long?"
+        ]
+      },
+      "es": {
+        "question": "¿Por qué se retrasa mi pedido?",
+        "answer": "Los retrasos suelen deberse a acumulación de envíos en la empresa de transporte, al clima o a problemas al verificar la dirección. Consulta la página de seguimiento; si no hay novedades en 5 días hábiles, contacta con soporte.",
+        "alternates": [
+          "Mi pedido llega tarde",
+          "Mi paquete todavía no ha llegado",
+          "¿Por qué tarda tanto mi entrega?"
+        ]
+      }
     },
     {
       "id": 10,
-      "category": "Shipping",
-      "question": "How long does shipping take?",
-      "answer": "Standard shipping takes 3 to 5 business days. Express shipping takes 1 to 2 business days. Delivery times for remote areas may be longer."
+      "category": {
+        "en": "Shipping",
+        "es": "Envíos"
+      },
+      "en": {
+        "question": "How long does shipping take?",
+        "answer": "Standard shipping takes 3 to 5 business days. Express shipping takes 1 to 2 business days. Delivery times for remote areas may be longer.",
+        "alternates": [
+          "How many days does delivery take?",
+          "When will my order arrive?",
+          "How fast is express delivery?"
+        ]
+      },
+      "es": {
+        "question": "¿Cuánto tarda el envío?",
+        "answer": "El envío estándar tarda de 3 a 5 días hábiles. El envío exprés tarda de 1 a 2 días hábiles. Las entregas en zonas remotas pueden tardar más.",
+        "alternates": [
+          "¿Cuántos días tarda la entrega?",
+          "¿Cuándo llegará mi pedido?",
+          "¿Qué tan rápido es el envío exprés?"
+        ]
+      }
     },
     {
       "id": 11,
-      "category": "Shipping",
-      "question": "How much does shipping cost?",
-      "answer": "Standard shipping is free on orders over $50 and costs $4.99 otherwise. Express shipping costs $12.99 for any order."
+      "category": {
+        "en": "Shipping",
+        "es": "Envíos"
+      },
+      "en": {
+        "question": "How much does shipping cost?",
+        "answer": "Standard shipping is free on orders over $50 and costs $4.99 otherwise. Express shipping costs $12.99 for any order.",
+        "alternates": [
+          "Is shipping free?",
+          "What are the delivery fees?",
+          "How much is express shipping?"
+        ]
+      },
+      "es": {
+        "question": "¿Cuánto cuesta el envío?",
+        "answer": "El envío estándar es gratis en pedidos de más de 50 $ y cuesta 4,99 $ en los demás. El envío exprés cuesta 12,99 $ en cualquier pedido.",
+        "alternates": [
+          "¿El envío es gratis?",
+          "¿Cuáles son los gastos de envío?",
+          "¿Cuánto cuesta el envío exprés?"
+        ]
+      }
     },
     {
       "id": 12,
-      "category": "Shipping",
-      "question": "Do you ship internationally?",
-      "answer": "Yes, we ship to over 40 countries. International shipping costs and delivery times are shown at checkout once you enter your address. Import duties are paid by the recipient."
+      "category": {
+        "en": "Shipping",
+        "es": "Envíos"
+      },
+      "en": {
+        "question": "Do you ship internationally?",
+        "answer": "Yes, we ship to over 40 countries. International shipping costs and delivery times are shown at checkout once you enter your address. Import duties are paid by the recipient.",
+        "alternates": [
+          "Can you ship to another country?",
+          "Do you deliver abroad?",
+          "Do I have to pay customs fees?"
+        ]
+      },
+      "es": {
+        "question": "¿Hacéis envíos internacionales?",
+        "answer": "Sí, enviamos a más de 40 países. Los costes y plazos de envío internacional aparecen en el pago al introducir tu dirección. Los aranceles de importación los paga el destinatario.",
+        "alternates": [
+          "¿Enviáis a otros países?",
+          "¿Hacen entregas al extranjero?",
+          "¿Tengo que pagar aduanas?"
+        ]
+      }
     },
     {
       "id": 13,
-      "category": "Returns",
-      "question": "What is your return policy?",
-      "answer": "Unused items in their original packaging can be returned within 30 days of delivery for a full refund. Sale items can be returned within 14 days."
+      "category": {
+        "en": "Returns",
+        "es": "Devoluciones"
+      },
+      "en": {
+        "question": "What is your return policy?",
+        "answer": "Unused items in their original packaging can be returned within 30 days of delivery for a full refund. Sale items can be returned within 14 days.",
+        "alternates": [
+          "How many days do I have to return something?",
+          "Can I return sale items?",
+          "What is the return window?"
+        ]
+      },
+      "es": {
+        "question": "¿Cuál es vuestra política de devoluciones?",
+        "answer": "Los artículos sin usar y en su embalaje original se pueden devolver en los 30 días posteriores a la entrega para un reembolso completo. Los artículos en oferta se pueden devolver en 14 días.",
+        "alternates": [
+          "¿Cuántos días tengo para devolver algo?",
+          "¿Puedo devolver artículos rebajados?",
+          "¿Cuál es el plazo de devolución?"
+        ]
+      }
     },
     {
       "id": 14,
-      "category": "Returns",
-      "question": "How do I return an item?",
-      "answer": "Go to Orders, select the order, tap 'Return items', choose the items and a reason, then print the prepaid label or show the QR code at a drop-off point."
+      "category": {
+        "en": "Returns",
+        "es": "Devoluciones"
+      },
+      "en": {
+        "question": "How do I return an item?",
+        "answer": "Go to Orders, select the order, tap 'Return items', choose the items and a reason, then print the prepaid label or show the QR code at a drop-off point.",
+        "alternates": ["How do I send an item back?", "Where do I get a return label?"]
+      },
+      "es": {
+        "question": "¿Cómo devuelvo un artículo?",
+        "answer": "Ve a Pedidos, selecciona el pedido, toca 'Devolver artículos', elige los artículos y un motivo, y luego imprime la etiqueta prepagada o muestra el código QR en un punto de entrega.",
+        "alternates": [
+          "¿Cómo envío de vuelta un artículo?",
+          "¿Dónde consigo la etiqueta de devolución?"
+        ]
+      }
     },
     {
       "id": 15,
-      "category": "Returns",
-      "question": "When will I get my refund?",
-      "answer": "Refunds are issued to the original payment method within 5 business days after we receive and inspect the returned item. Your bank may take a few more days to show it."
+      "category": {
+        "en": "Returns",
+        "es": "Devoluciones"
+      },
+      "en": {
+        "question": "When will I get my refund?",
+        "answer": "Refunds are issued to the original payment method within 5 business days after we receive and inspect the returned item. Your bank may take a few more days to show it.",
+        "alternates": [
+          "How long does a refund take?",
+          "When do I get my money back?",
+          "I returned an item but haven't been refunded"
+        ]
+      },
+      "es": {
+        "question": "¿Cuándo recibiré mi reembolso?",
+        "answer": "Los reembolsos se emiten al método de pago original en un plazo de 5 días hábiles después de recibir e inspeccionar el artículo devuelto. Tu banco puede tardar unos días más en mostrarlo.",
+        "alternates": [
+          "¿Cuánto tarda un reembolso?",
+          "¿Cuándo me devuelven el dinero?",
+          "Devolví un artículo y no me han reembolsado"
+        ]
+      }
     },
     {
       "id": 16,
-      "category": "Returns",
-      "question": "Can I exchange an item for a different size?",
-      "answer": "Yes. Start a return, choose 'Exchange' as the option, and pick the new size. We ship the replacement as soon as the original item is scanned by the carrier."
+      "category": {
+        "en": "Returns",
+        "es": "Devoluciones"
+      },
+      "en": {
+        "question": "Can I exchange an item for a different size?",
+        "answer": "Yes. Start a return, choose 'Exchange' as the option, and pick the new size. We ship the replacement as soon as the original item is scanned by the carrier.",
+        "alternates": ["The size is wrong, can I swap it?", "How do I exchange for a bigger size?"]
+      },
+      "es": {
+        "question": "¿Puedo cambiar un artículo por otra talla?",
+        "answer": "Sí. Inicia una devolución, elige la opción 'Cambio' y selecciona la nueva talla. Enviamos el artículo de reemplazo en cuanto la empresa de transporte escanea el original.",
+        "alternates": [
+          "La talla no me queda, ¿puedo cambiarla?",
+          "¿Cómo cambio por una talla más grande?"
+        ]
+      }
     },
     {
       "id": 17,
-      "category": "Payments",
-      "question": "Which payment methods do you accept?",
-      "answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, Google Pay, and store gift cards."
+      "category": {
+        "en": "Payments",
+        "es": "Pagos"
+      },
+      "en": {
+        "question": "Which payment methods do you accept?",
+        "answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, Google Pay, and store gift cards.",
+        "alternates": [
+          "Can I pay with PayPal?",
+          "Do you accept Apple Pay?",
+          "What cards can I use?"
+        ]
+      },
+      "es": {
+        "question": "¿Qué métodos de pago aceptáis?",
+        "answer": "Aceptamos Visa, Mastercard, American Express, PayPal, Apple Pay, Google Pay y tarjetas regalo de la tienda.",
+        "alternates": [
+          "¿Puedo pagar con PayPal?",
+          "¿Aceptáis Apple Pay?",
+          "¿Qué tarjetas puedo usar?"
+        ]
+      }
     },
     {
       "id": 18,
-      "category": "Payments",
-      "question": "Is it safe to save my card in the app?",
-      "answer": "Yes. Card details are tokenized by our PCI-DSS certified payment provider. We never store your full card number on our servers or on your device."
+      "category": {
+        "en": "Payments",
+        "es": "Pagos"
+      },
+      "en": {
+        "question": "Is it safe to save my card in the app?",
+        "answer": "Yes. Card details are tokenized by our PCI-DSS certified payment provider. We never store your full card number on our servers or on your device.",
+        "alternates": ["Is my credit card information secure?", "Do you store my card number?"]
+      },
+      "es": {
+        "question": "¿Es seguro guardar mi tarjeta en la app?",
+        "answer": "Sí. Los datos de la tarjeta los tokeniza nuestro proveedor de pagos con certificación PCI-DSS. Nunca guardamos el número completo de tu tarjeta en nuestros servidores ni en tu dispositivo.",
+        "alternates": [
+          "¿Están seguros los datos de mi tarjeta?",
+          "¿Guardáis el número de mi tarjeta?"
+        ]
+      }
     },
     {
       "id": 19,
-      "category": "Payments",
-      "question": "Why was my payment declined?",
-      "answer": "Payments are usually declined because of incorrect card details, insufficient funds, or a security block by your bank. Double-check your details or contact your bank, then try again."
+      "category": {
+        "en": "Payments",
+        "es": "Pagos"
+      },
+      "en": {
+        "question": "Why was my payment declined?",
+        "answer": "Payments are usually declined because of incorrect card details, insufficient funds, or a security block by your bank. Double-check your details or contact your bank, then try again.",
+        "alternates": [
+          "My card was declined",
+          "The payment failed at checkout",
+          "Why didn't my payment go through?"
+        ]
+      },
+      "es": {
+        "question": "¿Por qué se rechazó mi pago?",
+        "answer": "Los pagos suelen rechazarse por datos de tarjeta incorrectos, saldo insuficiente o un bloqueo de seguridad de tu banco. Revisa los datos o contacta con tu banco y vuelve a intentarlo.",
+        "alternates": [
+          "Me rechazaron la tarjeta",
+          "El pago falló al finalizar la compra",
+          "¿Por qué no se completó mi pago?"
+        ]
+      }
     },
     {
       "id": 20,
-      "category": "Payments",
-      "question": "Can I pay in installments?",
-      "answer": "Yes, orders over $100 can be split into 4 interest-free installments with our pay-later partner. Choose 'Pay later' at checkout to see if you are eligible."
+      "category": {
+        "en": "Payments",
+        "es": "Pagos"
+      },
+      "en": {
+        "question": "Can I pay in installments?",
+        "answer": "Yes, orders over $100 can be split into 4 interest-free installments with our pay-later partner. Choose 'Pay later' at checkout to see if you are eligible.",
+        "alternates": ["Do you have buy now pay later?", "Can I split my payment?"]
+      },
+      "es": {
+        "question": "¿Puedo pagar a plazos?",
+        "answer": "Sí, los pedidos de más de 100 $ se pueden dividir en 4 plazos sin intereses con nuestro socio de pago aplazado. Elige 'Pagar después' al finalizar la compra para ver si cumples los requisitos.",
+        "alternates": ["¿Tenéis compra ahora y paga después?", "¿Puedo dividir el pago?"]
+      }
     },
     {
       "id": 21,
-      "category": "Payments",
-      "question": "How do I use a promo code?",
-      "answer": "Enter the code in the 'Promo code' field on the checkout screen and tap Apply. Only one promo code can be used per order, and codes cannot be combined with gift cards for discounts."
+      "category": {
+        "en": "Payments",
+        "es": "Pagos"
+      },
+      "en": {
+        "question": "How do I use a promo code?",
+        "answer": "Enter the code in the 'Promo code' field on the checkout screen and tap Apply. Only one promo code can be used per order, and codes cannot be combined with gift cards for discounts.",
+        "alternates": [
+          "Where do I enter a discount code?",
+          "My coupon code isn't working",
+          "Can I use two promo codes?"
+        ]
+      },
+      "es": {
+        "question": "¿Cómo uso un código promocional?",
+        "answer": "Introduce el código en el campo 'Código promocional' de la pantalla de pago y toca Aplicar. Solo se puede usar un código por pedido, y los códigos no se pueden combinar con tarjetas regalo para obtener descuentos.",
+        "alternates": [
+          "¿Dónde pongo un código de descuento?",
+          "Mi cupón no funciona",
+          "¿Puedo usar dos códigos promocionales?"
+        ]
+      }
     },
     {
       "id": 22,
-      "category": "Loyalty",
-      "question": "How does the rewards program work?",
-      "answer": "You earn 1 point for every $1 spent. Every 100 points can be redeemed for $5 off a future order. Points expire 12 months after they are earned."
+      "category": {
+        "en": "Loyalty",
+        "es": "Recompensas"
+      },
+      "en": {
+        "question": "How does the rewards program work?",
+        "answer": "You earn 1 point for every $1 spent. Every 100 points can be redeemed for $5 off a future order. Points expire 12 months after they are earned.",
+        "alternates": ["How do I earn points?", "How do I redeem my points?", "Do points expire?"]
+      },
+      "es": {
+        "question": "¿Cómo funciona el programa de recompensas?",
+        "answer": "Ganas 1 punto por cada 1 $ que gastas. Cada 100 puntos se pueden canjear por 5 $ de descuento en un pedido futuro. Los puntos caducan 12 meses después de obtenerlos.",
+        "alternates": ["¿Cómo gano puntos?", "¿Cómo canjeo mis puntos?", "¿Caducan los puntos?"]
+      }
     },
     {
       "id": 23,
-      "category": "Loyalty",
-      "question": "Where can I see my reward points?",
-      "answer": "Your current points balance and expiry dates are shown under Profile > Rewards."
+      "category": {
+        "en": "Loyalty",
+        "es": "Recompensas"
+      },
+      "en": {
+        "question": "Where can I see my reward points?",
+        "answer": "Your current points balance and expiry dates are shown under Profile > Rewards.",
+        "alternates": ["How many points do I have?", "Where is my points balance?"]
+      },
+      "es": {
+        "question": "¿Dónde puedo ver mis puntos de recompensa?",
+        "answer": "Tu saldo actual de puntos y sus fechas de caducidad aparecen en Perfil > Recompensas.",
+        "alternates": ["¿Cuántos puntos tengo?", "¿Dónde veo mi saldo de puntos?"]
+      }
     },
     {
       "id": 24,
-      "category": "App",
-      "question": "How do I turn notifications on or off?",
-      "answer": "Go to Profile > Settings > Notifications to choose which alerts you receive. You can also disable all notifications from your phone's system settings."
+      "category": {
+        "en": "App",
+        "es": "App"
+      },
+      "en": {
+        "question": "How do I turn notifications on or off?",
+        "answer": "Go to Profile > Settings > Notifications to choose which alerts you receive. You can also disable all notifications from your phone's system settings.",
+        "alternates": ["How do I stop push notifications?", "The app sends me too many alerts"]
+      },
+      "es": {
+        "question": "¿Cómo activo o desactivo las notificaciones?",
+        "answer": "Ve a Perfil > Ajustes > Notificaciones para elegir qué avisos recibes. También puedes desactivar todas las notificaciones desde los ajustes del sistema de tu teléfono.",
+        "alternates": ["¿Cómo quito las notificaciones push?", "La app me manda demasiados avisos"]
+      }
     },
     {
       "id": 25,
-      "category": "App",
-      "question": "Does the app work offline?",
-      "answer": "You can browse previously loaded products and view your past orders offline. Placing orders, payments, and tracking require an internet connection."
+      "category": {
+        "en": "App",
+        "es": "App"
+      },
+      "en": {
+        "question": "Does the app work offline?",
+        "answer": "You can browse previously loaded products and view your past orders offline. Placing orders, payments, and tracking require an internet connection.",
+        "alternates": ["Can I use the app without internet?", "Does it work in airplane mode?"]
+      },
+      "es": {
+        "question": "¿La app funciona sin conexión?",
+        "answer": "Puedes ver productos cargados anteriormente y tus pedidos pasados sin conexión. Hacer pedidos, pagar y seguir envíos requiere conexión a internet.",
+        "alternates": ["¿Puedo usar la app sin internet?", "¿Funciona en modo avión?"]
+      }
     },
     {
       "id": 26,
-      "category": "App",
-      "question": "How do I switch to dark mode?",
-      "answer": "Open Profile > Settings > Appearance and choose Light, Dark, or 'Match system'."
+      "category": {
+        "en": "App",
+        "es": "App"
+      },
+      "en": {
+        "question": "How do I switch to dark mode?",
+        "answer": "Open Profile > Settings > Appearance and choose Light, Dark, or 'Match system'.",
+        "alternates": ["Is there a dark theme?", "How do I change the app theme?"]
+      },
+      "es": {
+        "question": "¿Cómo activo el modo oscuro?",
+        "answer": "Abre Perfil > Ajustes > Apariencia y elige Claro, Oscuro o 'Igual que el sistema'.",
+        "alternates": ["¿Hay tema oscuro?", "¿Cómo cambio el tema de la app?"]
+      }
     },
     {
       "id": 27,
-      "category": "App",
-      "question": "The app keeps crashing. What should I do?",
-      "answer": "Update to the latest version from the App Store or Google Play, then restart your phone. If it still crashes, reinstall the app and contact support with your device model and OS version."
+      "category": {
+        "en": "App",
+        "es": "App"
+      },
+      "en": {
+        "question": "The app keeps crashing. What should I do?",
+        "answer": "Update to the latest version from the App Store or Google Play, then restart your phone. If it still crashes, reinstall the app and contact support with your device model and OS version.",
+        "alternates": ["The app is crashing", "The app freezes and closes", "The app won't open"]
+      },
+      "es": {
+        "question": "La app se cierra sola. ¿Qué hago?",
+        "answer": "Actualiza a la última versión desde App Store o Google Play y reinicia el teléfono. Si sigue cerrándose, reinstala la app y contacta con soporte indicando el modelo de tu dispositivo y la versión del sistema.",
+        "alternates": ["La app se bloquea", "La app se congela y se cierra", "La app no abre"]
+      }
     },
     {
       "id": 28,
-      "category": "Privacy",
-      "question": "What data do you collect about me?",
-      "answer": "We collect the information you provide (name, email, addresses, orders) and basic usage analytics. We never sell your personal data. See the Privacy Policy in Profile > Legal for details."
+      "category": {
+        "en": "Privacy",
+        "es": "Privacidad"
+      },
+      "en": {
+        "question": "What data do you collect about me?",
+        "answer": "We collect the information you provide (name, email, addresses, orders) and basic usage analytics. We never sell your personal data. See the Privacy Policy in Profile > Legal for details.",
+        "alternates": ["Do you sell my personal data?", "What information does the app collect?"]
+      },
+      "es": {
+        "question": "¿Qué datos recopiláis sobre mí?",
+        "answer": "Recopilamos la información que nos das (nombre, correo, direcciones, pedidos) y analíticas básicas de uso. Nunca vendemos tus datos personales. Consulta la Política de privacidad en Perfil > Legal para más detalles.",
+        "alternates": ["¿Vendéis mis datos personales?", "¿Qué información recoge la app?"]
+      }
     },
     {
       "id": 29,
-      "category": "Privacy",
-      "question": "How can I download a copy of my data?",
-      "answer": "Go to Profile > Privacy > Download my data. We prepare a ZIP file and email you a download link within 48 hours."
+      "category": {
+        "en": "Privacy",
+        "es": "Privacidad"
+      },
+      "en": {
+        "question": "How can I download a copy of my data?",
+        "answer": "Go to Profile > Privacy > Download my data. We prepare a ZIP file and email you a download link within 48 hours.",
+        "alternates": ["Can I export my data?", "I want a copy of all my personal information"]
+      },
+      "es": {
+        "question": "¿Cómo puedo descargar una copia de mis datos?",
+        "answer": "Ve a Perfil > Privacidad > Descargar mis datos. Preparamos un archivo ZIP y te enviamos un enlace de descarga por correo en un plazo de 48 horas.",
+        "alternates": [
+          "¿Puedo exportar mis datos?",
+          "Quiero una copia de toda mi información personal"
+        ]
+      }
     },
     {
       "id": 30,
-      "category": "Support",
-      "question": "How do I contact customer support?",
-      "answer": "Use Profile > Help > Contact us to chat with an agent from 8am to 8pm, Monday to Saturday, or email support@example.com any time. We reply to emails within 24 hours."
+      "category": {
+        "en": "Support",
+        "es": "Soporte"
+      },
+      "en": {
+        "question": "How do I contact customer support?",
+        "answer": "Use Profile > Help > Contact us to chat with an agent from 8am to 8pm, Monday to Saturday, or email support@example.com any time. We reply to emails within 24 hours.",
+        "alternates": [
+          "How can I talk to a human?",
+          "What is your support email?",
+          "What are customer service hours?"
+        ]
+      },
+      "es": {
+        "question": "¿Cómo contacto con atención al cliente?",
+        "answer": "Usa Perfil > Ayuda > Contáctanos para chatear con un agente de 8:00 a 20:00, de lunes a sábado, o escribe a support@example.com en cualquier momento. Respondemos los correos en 24 horas.",
+        "alternates": [
+          "¿Cómo hablo con una persona?",
+          "¿Cuál es el correo de soporte?",
+          "¿Cuál es el horario de atención al cliente?"
+        ]
+      }
     },
     {
       "id": 31,
-      "category": "Support",
-      "question": "I received a damaged or wrong item. What should I do?",
-      "answer": "Report it within 7 days from Orders > select the order > 'Report a problem', and attach a photo. We will send a free replacement or a full refund, and you will not need to return the item."
+      "category": {
+        "en": "Support",
+        "es": "Soporte"
+      },
+      "en": {
+        "question": "I received a damaged or wrong item. What should I do?",
+        "answer": "Report it within 7 days from Orders > select the order > 'Report a problem', and attach a photo. We will send a free replacement or a full refund, and you will not need to return the item.",
+        "alternates": [
+          "My item arrived broken",
+          "I got the wrong product",
+          "The package was damaged"
+        ]
+      },
+      "es": {
+        "question": "Recibí un artículo dañado o equivocado. ¿Qué hago?",
+        "answer": "Infórmalo en un plazo de 7 días desde Pedidos > selecciona el pedido > 'Informar de un problema', y adjunta una foto. Te enviaremos un reemplazo gratis o un reembolso completo, y no tendrás que devolver el artículo.",
+        "alternates": [
+          "Mi artículo llegó roto",
+          "Me enviaron el producto equivocado",
+          "El paquete llegó dañado"
+        ]
+      }
     },
     {
       "id": 32,
-      "category": "Gift cards",
-      "question": "Do gift cards expire?",
-      "answer": "No, gift cards never expire. You can check the balance under Profile > Wallet > Gift cards."
+      "category": {
+        "en": "Gift cards",
+        "es": "Tarjetas regalo"
+      },
+      "en": {
+        "question": "Do gift cards expire?",
+        "answer": "No, gift cards never expire. You can check the balance under Profile > Wallet > Gift cards.",
+        "alternates": [
+          "How do I check my gift card balance?",
+          "Is there an expiry date on gift cards?"
+        ]
+      },
+      "es": {
+        "question": "¿Caducan las tarjetas regalo?",
+        "answer": "No, las tarjetas regalo no caducan nunca. Puedes consultar el saldo en Perfil > Cartera > Tarjetas regalo.",
+        "alternates": [
+          "¿Cómo consulto el saldo de mi tarjeta regalo?",
+          "¿Las tarjetas regalo tienen fecha de caducidad?"
+        ]
+      }
     },
     {
       "id": 33,
-      "category": "Store pickup",
-      "question": "Can I pick up my order in a store?",
-      "answer": "Yes. Choose 'Click & Collect' at checkout and select a store. Pickup is free, and we notify you when the order is ready, usually within 4 hours."
+      "category": {
+        "en": "Store pickup",
+        "es": "Recogida en tienda"
+      },
+      "en": {
+        "question": "Can I pick up my order in a store?",
+        "answer": "Yes. Choose 'Click & Collect' at checkout and select a store. Pickup is free, and we notify you when the order is ready, usually within 4 hours.",
+        "alternates": ["Do you offer click and collect?", "Can I collect my order in person?"]
+      },
+      "es": {
+        "question": "¿Puedo recoger mi pedido en una tienda?",
+        "answer": "Sí. Elige 'Recoger en tienda' al finalizar la compra y selecciona una tienda. La recogida es gratis y te avisamos cuando el pedido esté listo, normalmente en 4 horas.",
+        "alternates": ["¿Tenéis click and collect?", "¿Puedo recoger mi pedido en persona?"]
+      }
     },
     {
       "id": 34,
-      "category": "Store pickup",
-      "question": "How long will the store hold my pickup order?",
-      "answer": "Pickup orders are held for 7 days. If you don't collect it by then, the order is cancelled and you receive a full refund."
+      "category": {
+        "en": "Store pickup",
+        "es": "Recogida en tienda"
+      },
+      "en": {
+        "question": "How long will the store hold my pickup order?",
+        "answer": "Pickup orders are held for 7 days. If you don't collect it by then, the order is cancelled and you receive a full refund.",
+        "alternates": [
+          "What happens if I don't pick up my order?",
+          "How many days do I have to collect my order?"
+        ]
+      },
+      "es": {
+        "question": "¿Cuánto tiempo guarda la tienda mi pedido para recoger?",
+        "answer": "Los pedidos para recoger se guardan 7 días. Si no lo recoges en ese plazo, el pedido se cancela y recibes un reembolso completo.",
+        "alternates": [
+          "¿Qué pasa si no recojo mi pedido?",
+          "¿Cuántos días tengo para recoger mi pedido?"
+        ]
+      }
     },
     {
       "id": 35,
-      "category": "Store pickup",
-      "question": "What do I need to bring to collect my order?",
-      "answer": "Bring the pickup QR code from the order screen, or your order number and a photo ID matching the name on the order."
+      "category": {
+        "en": "Store pickup",
+        "es": "Recogida en tienda"
+      },
+      "en": {
+        "question": "What do I need to bring to collect my order?",
+        "answer": "Bring the pickup QR code from the order screen, or your order number and a photo ID matching the name on the order.",
+        "alternates": [
+          "Do I need ID to pick up my order?",
+          "What should I show at the store to collect?"
+        ]
+      },
+      "es": {
+        "question": "¿Qué necesito llevar para recoger mi pedido?",
+        "answer": "Lleva el código QR de recogida de la pantalla del pedido, o tu número de pedido y un documento de identidad con foto que coincida con el nombre del pedido.",
+        "alternates": [
+          "¿Necesito DNI para recoger mi pedido?",
+          "¿Qué tengo que enseñar en la tienda para recoger?"
+        ]
+      }
     },
     {
       "id": 36,
-      "category": "Subscriptions",
-      "question": "What is Acme Plus?",
-      "answer": "Acme Plus is our membership: free express shipping on every order, early access to sales, and double reward points. It costs $9.99 per month or $79 per year."
+      "category": {
+        "en": "Subscriptions",
+        "es": "Suscripciones"
+      },
+      "en": {
+        "question": "What is Acme Plus?",
+        "answer": "Acme Plus is our membership: free express shipping on every order, early access to sales, and double reward points. It costs $9.99 per month or $79 per year.",
+        "alternates": [
+          "How much is the membership?",
+          "What are the benefits of Acme Plus?",
+          "Is there a premium subscription?"
+        ]
+      },
+      "es": {
+        "question": "¿Qué es Acme Plus?",
+        "answer": "Acme Plus es nuestra membresía: envío exprés gratis en todos los pedidos, acceso anticipado a las rebajas y puntos de recompensa dobles. Cuesta 9,99 $ al mes o 79 $ al año.",
+        "alternates": [
+          "¿Cuánto cuesta la membresía?",
+          "¿Qué ventajas tiene Acme Plus?",
+          "¿Hay una suscripción premium?"
+        ]
+      }
     },
     {
       "id": 37,
-      "category": "Subscriptions",
-      "question": "How do I cancel my Acme Plus membership?",
-      "answer": "Go to Profile > Membership > Manage and tap 'Cancel membership'. You keep the benefits until the end of the current billing period."
+      "category": {
+        "en": "Subscriptions",
+        "es": "Suscripciones"
+      },
+      "en": {
+        "question": "How do I cancel my Acme Plus membership?",
+        "answer": "Go to Profile > Membership > Manage and tap 'Cancel membership'. You keep the benefits until the end of the current billing period.",
+        "alternates": ["How do I stop my subscription?", "I want to end Acme Plus"]
+      },
+      "es": {
+        "question": "¿Cómo cancelo mi membresía Acme Plus?",
+        "answer": "Ve a Perfil > Membresía > Gestionar y toca 'Cancelar membresía'. Mantienes las ventajas hasta el final del periodo de facturación actual.",
+        "alternates": ["¿Cómo dejo mi suscripción?", "Quiero dar de baja Acme Plus"]
+      }
     },
     {
       "id": 38,
-      "category": "Subscriptions",
-      "question": "Is there a free trial for Acme Plus?",
-      "answer": "Yes, new members get a 30-day free trial. You will not be charged if you cancel before the trial ends."
+      "category": {
+        "en": "Subscriptions",
+        "es": "Suscripciones"
+      },
+      "en": {
+        "question": "Is there a free trial for Acme Plus?",
+        "answer": "Yes, new members get a 30-day free trial. You will not be charged if you cancel before the trial ends.",
+        "alternates": ["Can I try the membership for free?", "How long is the free trial?"]
+      },
+      "es": {
+        "question": "¿Hay una prueba gratuita de Acme Plus?",
+        "answer": "Sí, los nuevos miembros tienen una prueba gratuita de 30 días. No se te cobrará si cancelas antes de que termine la prueba.",
+        "alternates": ["¿Puedo probar la membresía gratis?", "¿Cuánto dura la prueba gratuita?"]
+      }
     },
     {
       "id": 39,
-      "category": "Warranty",
-      "question": "Do your products come with a warranty?",
-      "answer": "All electronics include a 1-year manufacturer warranty. Other products are covered for 90 days against manufacturing defects."
+      "category": {
+        "en": "Warranty",
+        "es": "Garantía"
+      },
+      "en": {
+        "question": "Do your products come with a warranty?",
+        "answer": "All electronics include a 1-year manufacturer warranty. Other products are covered for 90 days against manufacturing defects.",
+        "alternates": ["How long is the warranty?", "Is my laptop covered by warranty?"]
+      },
+      "es": {
+        "question": "¿Vuestros productos tienen garantía?",
+        "answer": "Todos los productos electrónicos incluyen 1 año de garantía del fabricante. Los demás productos están cubiertos 90 días frente a defectos de fabricación.",
+        "alternates": ["¿Cuánto dura la garantía?", "¿Mi portátil está cubierto por la garantía?"]
+      }
     },
     {
       "id": 40,
-      "category": "Warranty",
-      "question": "How do I make a warranty claim?",
-      "answer": "Open Orders, select the item, and tap 'Warranty claim'. Describe the problem and add photos; we reply within 2 business days with next steps."
+      "category": {
+        "en": "Warranty",
+        "es": "Garantía"
+      },
+      "en": {
+        "question": "How do I make a warranty claim?",
+        "answer": "Open Orders, select the item, and tap 'Warranty claim'. Describe the problem and add photos; we reply within 2 business days with next steps.",
+        "alternates": [
+          "My product stopped working, what do I do?",
+          "How do I get a faulty item repaired?"
+        ]
+      },
+      "es": {
+        "question": "¿Cómo hago una reclamación de garantía?",
+        "answer": "Abre Pedidos, selecciona el artículo y toca 'Reclamación de garantía'. Describe el problema y añade fotos; respondemos en 2 días hábiles con los siguientes pasos.",
+        "alternates": [
+          "Mi producto dejó de funcionar, ¿qué hago?",
+          "¿Cómo consigo que reparen un artículo defectuoso?"
+        ]
+      }
     },
     {
       "id": 41,
-      "category": "Products",
-      "question": "How do I find my size?",
-      "answer": "Every clothing and shoe product page has a 'Size guide' link with measurements. If you are between sizes, we recommend choosing the larger one."
+      "category": {
+        "en": "Products",
+        "es": "Productos"
+      },
+      "en": {
+        "question": "How do I find my size?",
+        "answer": "Every clothing and shoe product page has a 'Size guide' link with measurements. If you are between sizes, we recommend choosing the larger one.",
+        "alternates": ["Is there a size chart?", "Which size should I order?"]
+      },
+      "es": {
+        "question": "¿Cómo encuentro mi talla?",
+        "answer": "Cada página de ropa y calzado tiene un enlace 'Guía de tallas' con medidas. Si estás entre dos tallas, te recomendamos elegir la más grande.",
+        "alternates": ["¿Hay una tabla de tallas?", "¿Qué talla debería pedir?"]
+      }
     },
     {
       "id": 42,
-      "category": "Products",
-      "question": "Can I get notified when an item is back in stock?",
-      "answer": "Yes. On the product page tap 'Notify me' and we will send a push notification and email as soon as it is available again."
+      "category": {
+        "en": "Products",
+        "es": "Productos"
+      },
+      "en": {
+        "question": "Can I get notified when an item is back in stock?",
+        "answer": "Yes. On the product page tap 'Notify me' and we will send a push notification and email as soon as it is available again.",
+        "alternates": ["The item I want is out of stock", "Will this product be restocked?"]
+      },
+      "es": {
+        "question": "¿Me podéis avisar cuando un artículo vuelva a estar disponible?",
+        "answer": "Sí. En la página del producto toca 'Avísame' y te enviaremos una notificación y un correo en cuanto vuelva a estar disponible.",
+        "alternates": [
+          "El artículo que quiero está agotado",
+          "¿Volverá a haber stock de este producto?"
+        ]
+      }
     },
     {
       "id": 43,
-      "category": "Products",
-      "question": "Do you offer price matching?",
-      "answer": "We match the price of identical items sold by major retailers within 14 days of your purchase. Contact support with a link to the lower price."
+      "category": {
+        "en": "Products",
+        "es": "Productos"
+      },
+      "en": {
+        "question": "Do you offer price matching?",
+        "answer": "We match the price of identical items sold by major retailers within 14 days of your purchase. Contact support with a link to the lower price.",
+        "alternates": ["I found it cheaper elsewhere", "Do you have a price match guarantee?"]
+      },
+      "es": {
+        "question": "¿Igualáis precios?",
+        "answer": "Igualamos el precio de artículos idénticos vendidos por grandes comercios en los 14 días posteriores a tu compra. Contacta con soporte con un enlace al precio más bajo.",
+        "alternates": ["Lo encontré más barato en otra tienda", "¿Tenéis garantía de mejor precio?"]
+      }
     },
     {
       "id": 44,
-      "category": "Products",
-      "question": "Can I save items for later?",
-      "answer": "Tap the heart icon on any product to add it to your Wishlist. You can view it under Profile > Wishlist on any device you log in to."
+      "category": {
+        "en": "Products",
+        "es": "Productos"
+      },
+      "en": {
+        "question": "Can I save items for later?",
+        "answer": "Tap the heart icon on any product to add it to your Wishlist. You can view it under Profile > Wishlist on any device you log in to.",
+        "alternates": ["How do I use the wishlist?", "Can I save products I like?"]
+      },
+      "es": {
+        "question": "¿Puedo guardar artículos para más tarde?",
+        "answer": "Toca el icono del corazón en cualquier producto para añadirlo a tu Lista de deseos. Puedes verla en Perfil > Lista de deseos en cualquier dispositivo en el que inicies sesión.",
+        "alternates": ["¿Cómo uso la lista de deseos?", "¿Puedo guardar productos que me gustan?"]
+      }
     },
     {
       "id": 45,
-      "category": "Gift cards",
-      "question": "How do I buy a gift card?",
-      "answer": "Go to Profile > Wallet > Gift cards > Buy a gift card. Choose an amount from $10 to $500, and we email it to the recipient on the date you choose."
+      "category": {
+        "en": "Gift cards",
+        "es": "Tarjetas regalo"
+      },
+      "en": {
+        "question": "How do I buy a gift card?",
+        "answer": "Go to Profile > Wallet > Gift cards > Buy a gift card. Choose an amount from $10 to $500, and we email it to the recipient on the date you choose.",
+        "alternates": ["Can I send a gift card to a friend?", "Where can I get a gift card?"]
+      },
+      "es": {
+        "question": "¿Cómo compro una tarjeta regalo?",
+        "answer": "Ve a Perfil > Cartera > Tarjetas regalo > Comprar una tarjeta regalo. Elige un importe entre 10 $ y 500 $, y se la enviamos por correo al destinatario en la fecha que elijas.",
+        "alternates": [
+          "¿Puedo regalar una tarjeta regalo a un amigo?",
+          "¿Dónde consigo una tarjeta regalo?"
+        ]
+      }
     },
     {
       "id": 46,
-      "category": "Gift cards",
-      "question": "Can I use more than one gift card on an order?",
-      "answer": "Yes, you can apply up to 3 gift cards per order, and pay any remaining amount with another payment method."
+      "category": {
+        "en": "Gift cards",
+        "es": "Tarjetas regalo"
+      },
+      "en": {
+        "question": "Can I use more than one gift card on an order?",
+        "answer": "Yes, you can apply up to 3 gift cards per order, and pay any remaining amount with another payment method.",
+        "alternates": ["Can I combine gift cards?", "How many gift cards can I use at once?"]
+      },
+      "es": {
+        "question": "¿Puedo usar más de una tarjeta regalo en un pedido?",
+        "answer": "Sí, puedes aplicar hasta 3 tarjetas regalo por pedido y pagar el resto con otro método de pago.",
+        "alternates": [
+          "¿Puedo combinar tarjetas regalo?",
+          "¿Cuántas tarjetas regalo puedo usar a la vez?"
+        ]
+      }
     },
     {
       "id": 47,
-      "category": "Orders",
-      "question": "Can I add items to an order I already placed?",
-      "answer": "Items cannot be added to an existing order. Place a new order instead; if both ship to the same address on the same day, we try to combine them."
+      "category": {
+        "en": "Orders",
+        "es": "Pedidos"
+      },
+      "en": {
+        "question": "Can I add items to an order I already placed?",
+        "answer": "Items cannot be added to an existing order. Place a new order instead; if both ship to the same address on the same day, we try to combine them.",
+        "alternates": [
+          "I forgot to add something to my order",
+          "Can I modify my order to include another item?"
+        ]
+      },
+      "es": {
+        "question": "¿Puedo añadir artículos a un pedido que ya hice?",
+        "answer": "No se pueden añadir artículos a un pedido existente. Haz un pedido nuevo; si ambos se envían a la misma dirección el mismo día, intentaremos juntarlos.",
+        "alternates": [
+          "Se me olvidó añadir algo a mi pedido",
+          "¿Puedo modificar mi pedido para incluir otro artículo?"
+        ]
+      }
     },
     {
       "id": 48,
-      "category": "Orders",
-      "question": "Where can I find my invoice?",
-      "answer": "Open Orders, select the order, and tap 'Download invoice'. Invoices are available as PDF once the order has shipped."
+      "category": {
+        "en": "Orders",
+        "es": "Pedidos"
+      },
+      "en": {
+        "question": "Where can I find my invoice?",
+        "answer": "Open Orders, select the order, and tap 'Download invoice'. Invoices are available as PDF once the order has shipped.",
+        "alternates": ["How do I get a receipt?", "I need an invoice for my purchase"]
+      },
+      "es": {
+        "question": "¿Dónde encuentro mi factura?",
+        "answer": "Abre Pedidos, selecciona el pedido y toca 'Descargar factura'. Las facturas están disponibles en PDF cuando el pedido se ha enviado.",
+        "alternates": ["¿Cómo consigo un recibo?", "Necesito una factura de mi compra"]
+      }
     },
     {
       "id": 49,
-      "category": "Payments",
-      "question": "Can I pay with cash on delivery?",
-      "answer": "Cash on delivery is not available. Please use a card, PayPal, Apple Pay, Google Pay, or a gift card."
+      "category": {
+        "en": "Payments",
+        "es": "Pagos"
+      },
+      "en": {
+        "question": "Can I pay with cash on delivery?",
+        "answer": "Cash on delivery is not available. Please use a card, PayPal, Apple Pay, Google Pay, or a gift card.",
+        "alternates": ["Can I pay cash when the order arrives?", "Do you accept cash?"]
+      },
+      "es": {
+        "question": "¿Puedo pagar contra reembolso?",
+        "answer": "El pago contra reembolso no está disponible. Usa una tarjeta, PayPal, Apple Pay, Google Pay o una tarjeta regalo.",
+        "alternates": ["¿Puedo pagar en efectivo cuando llegue el pedido?", "¿Aceptáis efectivo?"]
+      }
     },
     {
       "id": 50,
-      "category": "Account",
-      "question": "Can I share my account with family members?",
-      "answer": "Each account is for one person, but you can add up to 5 delivery addresses and send gift cards to family members."
+      "category": {
+        "en": "Account",
+        "es": "Cuenta"
+      },
+      "en": {
+        "question": "Can I share my account with family members?",
+        "answer": "Each account is for one person, but you can add up to 5 delivery addresses and send gift cards to family members.",
+        "alternates": ["Can my partner use my account?", "Can several people use the same account?"]
+      },
+      "es": {
+        "question": "¿Puedo compartir mi cuenta con mi familia?",
+        "answer": "Cada cuenta es para una persona, pero puedes añadir hasta 5 direcciones de entrega y enviar tarjetas regalo a tus familiares.",
+        "alternates": [
+          "¿Mi pareja puede usar mi cuenta?",
+          "¿Varias personas pueden usar la misma cuenta?"
+        ]
+      }
     },
     {
       "id": 51,
-      "category": "App",
-      "question": "Which phones does the app support?",
-      "answer": "The app supports iPhones running iOS 16 or later and Android phones running Android 9 or later."
+      "category": {
+        "en": "App",
+        "es": "App"
+      },
+      "en": {
+        "question": "Which phones does the app support?",
+        "answer": "The app supports iPhones running iOS 16 or later and Android phones running Android 9 or later.",
+        "alternates": [
+          "Will the app work on my phone?",
+          "What are the minimum requirements for the app?"
+        ]
+      },
+      "es": {
+        "question": "¿Qué teléfonos son compatibles con la app?",
+        "answer": "La app es compatible con iPhone con iOS 16 o posterior y con teléfonos Android con Android 9 o posterior.",
+        "alternates": [
+          "¿La app funciona en mi teléfono?",
+          "¿Cuáles son los requisitos mínimos de la app?"
+        ]
+      }
     },
     {
       "id": 52,
-      "category": "Accessibility",
-      "question": "Does the app support screen readers?",
-      "answer": "Yes. The app works with VoiceOver on iOS and TalkBack on Android, and supports your phone's larger text settings."
+      "category": {
+        "en": "Accessibility",
+        "es": "Accesibilidad"
+      },
+      "en": {
+        "question": "Does the app support screen readers?",
+        "answer": "Yes. The app works with VoiceOver on iOS and TalkBack on Android, and supports your phone's larger text settings.",
+        "alternates": [
+          "Does the app work with VoiceOver?",
+          "Is the app accessible for blind users?",
+          "Can I make the text bigger?"
+        ]
+      },
+      "es": {
+        "question": "¿La app es compatible con lectores de pantalla?",
+        "answer": "Sí. La app funciona con VoiceOver en iOS y TalkBack en Android, y respeta el tamaño de texto grande de tu teléfono.",
+        "alternates": [
+          "¿La app funciona con VoiceOver?",
+          "¿La app es accesible para personas ciegas?",
+          "¿Puedo poner el texto más grande?"
+        ]
+      }
     }
   ]
 }

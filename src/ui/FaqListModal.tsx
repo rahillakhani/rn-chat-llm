@@ -12,11 +12,15 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type { FaqItem } from '../data/faqSchema';
+import type { Lang } from '../i18n/lang';
+import type { Strings } from '../i18n/strings';
 import { colors } from './theme';
 
 type Props = {
   visible: boolean;
-  listFaqs: () => Promise<FaqItem[]>;
+  lang: Lang;
+  t: Strings;
+  listFaqs: (lang: Lang) => Promise<FaqItem[]>;
   onAsk: (question: string) => void;
   onClose: () => void;
 };
@@ -27,14 +31,14 @@ type LoadState =
   | { status: 'ERROR'; message: string };
 
 /** Tester reference: every FAQ stored in SQLite, grouped by category. Tap a question to ask it. */
-export function FaqListModal({ visible, listFaqs, onAsk, onClose }: Props) {
+export function FaqListModal({ visible, lang, t, listFaqs, onAsk, onClose }: Props) {
   const [load, setLoad] = useState<LoadState>({ status: 'LOADING' });
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
     if (!visible) return;
     let cancelled = false;
-    listFaqs().then(
+    listFaqs(lang).then(
       (items) => !cancelled && setLoad({ status: 'LOADED', items }),
       (e: unknown) =>
         !cancelled &&
@@ -43,7 +47,7 @@ export function FaqListModal({ visible, listFaqs, onAsk, onClose }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [visible, listFaqs]);
+  }, [visible, lang, listFaqs]);
 
   const sections = useMemo(() => {
     if (load.status !== 'LOADED') return [];
@@ -63,11 +67,11 @@ export function FaqListModal({ visible, listFaqs, onAsk, onClose }: Props) {
       <SafeAreaView style={styles.root}>
         <View style={styles.header}>
           <View style={styles.flex}>
-            <Text style={styles.title}>FAQ list</Text>
-            <Text style={styles.sub}>{total} questions · tap one to ask the chatbot</Text>
+            <Text style={styles.title}>{t.faqListTitle}</Text>
+            <Text style={styles.sub}>{t.faqListSub(total)}</Text>
           </View>
           <Pressable onPress={onClose} accessibilityRole="button">
-            <Text style={styles.link}>Close</Text>
+            <Text style={styles.link}>{t.close}</Text>
           </Pressable>
         </View>
 
@@ -75,8 +79,8 @@ export function FaqListModal({ visible, listFaqs, onAsk, onClose }: Props) {
           style={styles.search}
           value={filter}
           onChangeText={setFilter}
-          placeholder="Filter questions"
-          accessibilityLabel="Filter questions"
+          placeholder={t.filter}
+          accessibilityLabel={t.filter}
         />
 
         {load.status === 'LOADING' && (
@@ -89,7 +93,7 @@ export function FaqListModal({ visible, listFaqs, onAsk, onClose }: Props) {
             keyExtractor={(item) => String(item.id)}
             contentContainerStyle={styles.list}
             stickySectionHeadersEnabled
-            ListEmptyComponent={<Text style={styles.sub}>No questions match “{filter}”.</Text>}
+            ListEmptyComponent={<Text style={styles.sub}>{t.noFilterMatch(filter)}</Text>}
             renderSectionHeader={({ section }) => (
               <Text style={styles.sectionHeader}>
                 {section.title} ({section.data.length})
@@ -100,7 +104,7 @@ export function FaqListModal({ visible, listFaqs, onAsk, onClose }: Props) {
                 style={styles.row}
                 onPress={() => onAsk(item.question)}
                 accessibilityRole="button"
-                accessibilityHint="Asks this question in the chat"
+                accessibilityHint={t.askHint}
               >
                 <Text style={styles.question}>
                   <Text style={styles.id}>#{item.id} </Text>

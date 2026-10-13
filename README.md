@@ -1,83 +1,137 @@
 # rn-chat-llm: offline FAQ chatbot (POC)
 
 A React Native (Expo SDK 57) chatbot that answers questions from an FAQ dataset stored in a SQLite vector
-database. Everything runs **on the phone**: no server and no cloud AI API. The AI models are **not bundled**
-in the app. They are downloaded once, right after install, and from then on the chatbot works fully offline.
+database, in **English and Spanish**. Everything runs **on the phone**: no server and no cloud AI API. The AI
+models are **not bundled** in the app. They are downloaded once, right after install, and from then on the
+chatbot works fully offline.
 
 ## 1. How it works
 
 There are two small AI models, both run on the device by [llama.cpp](https://github.com/ggml-org/llama.cpp)
 through [`llama.rn`](https://github.com/mybigday/llama.rn):
 
-- an **embedding model** that turns text into a list of 384 numbers (a vector), so that texts with similar
-  meaning get similar vectors;
-- a **chat model (the LLM)** that writes the final answer in plain language.
+- a **multilingual embedding model** that turns text into a list of 384 numbers (a vector). Texts with the same
+  meaning get similar vectors **even across languages**, so "¿Dónde está mi pedido?" and "Where is my order?"
+  land next to each other;
+- a **chat model (the LLM)** that rewrites English answers in plain language.
 
 **Setup (once, on first launch):**
 
-1. The 52 FAQ entries in [`src/data/faq.json`](src/data/faq.json) are copied into a SQLite database on the phone.
-2. Each FAQ (question + answer) is turned into a vector by the embedding model and stored in a `faq_vec`
-   table. This table uses the [sqlite-vec](https://github.com/asg017/sqlite-vec) extension, which makes
-   SQLite a vector database that can find the nearest vectors quickly.
+1. The 52 FAQs in [`src/data/faq.json`](src/data/faq.json), each in English and Spanish, are copied into a
+   SQLite database on the phone.
+2. For every FAQ and language, the question, 2–3 **alternative phrasings** ("I forgot my password",
+   "Olvidé mi contraseña") and the question+answer are each turned into a vector: 454 vectors in total. They are
+   stored in a `faq_vec` table using the [sqlite-vec](https://github.com/asg017/sqlite-vec) extension, which
+   makes SQLite a vector database.
 
 **Every time the user asks a question:**
 
 ```
-"How do I get my money back?"
+"¿Cuándo me devuelven el dinero?"
    │
-   ▼  1. Embed the question                     → 384-number vector
-   ▼  2. Vector search in SQLite (sqlite-vec)    → 5 closest FAQs, each with a match score
-   ▼  3. Relevance check
-   │      best match below 45%? → reply "Sorry, I couldn't find that in our FAQ"  (LLM is not used)
-   ▼  4. Send the 1–3 best FAQs + the question to the LLM
-   │      "Answer using ONLY these FAQ entries, in 1–3 sentences"
-   ▼  5. Answer streams into the chat, word by word,
-          with the FAQ entries it used and their match % shown underneath
+   ▼  1. Detect the language (English or Spanish)      → es
+   ▼  2. Embed the question                            → 384-number vector
+   ▼  3. Vector search in SQLite (sqlite-vec)           → similarity to all 454 stored texts
+   ▼  4. Score each FAQ = best vector similarity + 0.3 × keyword overlap
+   ▼  5. Decide, based on the best score:
+   │      ≥ 0.56        → answer it
+   │      0.50 – 0.56   → "Not sure, is it one of these?" + top 3 questions to tap
+   │      < 0.50        → "Sorry, I couldn't find that in our FAQ"
+   ▼  6. Answer, in the language of the question:
+          Spanish → the Spanish FAQ answer, word for word
+          English → the LLM rewrites the English FAQ answer (falls back to the FAQ text if it fails)
+          + "Did you mean…" buttons for FAQs that scored almost as high
+          + the matched FAQ question and its match %
 ```
 
-This pattern is called **RAG (retrieval-augmented generation)**: the LLM doesn't need to "know" the FAQ, it is
-handed the relevant entries each time. Step 3 matters for a tiny model: if nothing relevant is found, the LLM is
-never asked, so it can't invent an answer. If the LLM returns an empty reply, the best FAQ answer is shown as-is.
+Answers always come from the FAQ: the LLM only ever sees the one matched FAQ entry, and it is never asked
+when nothing matches. Spanish answers skip the LLM because the lightest model writes poor Spanish.
 
-## 2. Which LLM we use
+### Languages
 
-| Role       | Model                                                                                            | Download   | Notes                                        |
-| ---------- | ------------------------------------------------------------------------------------------------ | ---------- | -------------------------------------------- |
-| Chat LLM   | [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), Q4_K_M GGUF | **105 MB** | Lightest instruct model. Fast, basic answers |
-| Embeddings | [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), Q8_0 GGUF     | **25 MB**  | 384-dimension vectors                        |
+- **App text** (buttons, messages, FAQ list) starts in the phone's language (Spanish if the phone is set to
+  Spanish, otherwise English) and can be switched with the **EN | ES** toggle in the chat header.
+- **Answers** follow the language the question is typed in, whatever the toggle says. If a question has no
+  clear language (e.g. just "PayPal"), the toggle's language is used.
 
-- The app always uses **SmolLM2-135M**, the lightest model. There is no model picker: it is downloaded
+### How accurate is the matching?
+
+Measured with the app's own matching code and the real embedding model, on a held-out set of 120 test
+questions ([`src/rag/__fixtures__/retrieval-eval.json`](src/rag/__fixtures__/retrieval-eval.json)): 52 English,
+52 Spanish, each worded differently from the FAQ and its alternatives, plus 16 off-topic questions.
+
+| Measure                                                      | Result    |
+| ------------------------------------------------------------ | --------- |
+| Right FAQ answered directly (top-1)                          | **90.4%** |
+| Right FAQ answered **or** offered as a button to tap         | **97.1%** |
+| Fully correct, incl. off-topic questions getting "no answer" | 88.3%     |
+| Language of the question detected correctly                  | 96.7%     |
+| Off-topic questions shown suggestions instead of "no answer" | 2 of 16   |
+
+How we got there (same test set):
+
+| Setup                                          | Top-1 (EN / ES) |
+| ---------------------------------------------- | --------------- |
+| Previous English-only model (all-MiniLM-L6-v2) | 55% (92% / 17%) |
+| Multilingual model, question+answer only       | 83% (88% / 77%) |
+| + alternative phrasings per FAQ                | 86% (92% / 79%) |
+| + keyword overlap (final)                      | **90%**         |
+
+The test questions and the alternative phrasings were both written by Claude for this POC, so real users may
+score somewhat lower; testers should report questions that fail. To re-run the measurement:
+
+```bash
+brew install llama.cpp
+llama-server -m paraphrase-multilingual-MiniLM-L12-118M-v2-Q4_K_M.gguf --embeddings --pooling mean --port 8080
+LIVE_EMBEDDINGS_URL=http://localhost:8080 npm run eval:retrieval -- --silent=false
+```
+
+## 2. Which models we use
+
+| Role       | Model                                                                                                                                    | Download   | Notes                                                    |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------------------------------------------------------- |
+| Chat LLM   | [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), Q4_K_M GGUF                                         | **105 MB** | Lightest instruct model. English answers only            |
+| Embeddings | [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2), Q4_K_M GGUF | **125 MB** | 384-dim vectors, 50+ languages incl. English and Spanish |
+
+- The app always uses **SmolLM2-135M**, the lightest model. There is no model picker: everything is downloaded
   automatically on first launch.
-- "Q4_K_M" / "Q8_0" means the model weights are compressed (quantized) to about 4 or 8 bits, which is what
-  makes them small enough for a phone.
-- Files are downloaded from Hugging Face. URL and size are in [`src/config/models.ts`](src/config/models.ts).
+- The embedding model is bigger than the old English-only one (25 MB) because it carries a vocabulary for 50+
+  languages. Its 4-bit (Q4_K_M) version matched the 8-bit one on the accuracy test and is 7 MB smaller. A
+  multilingual-e5-small file was also tested and rejected (it scored 12% in llama.cpp).
+- "Q4_K_M" means the model weights are compressed (quantized) to about 4 bits, which is what makes them small
+  enough for a phone.
+- Files are downloaded from Hugging Face. URLs and sizes are in [`src/config/models.ts`](src/config/models.ts).
+  The embedding file is a community GGUF conversion; for production, convert and host it yourself.
 - **GPU:** the chat model is offloaded to the GPU when the phone supports it: Metal on iPhone, OpenCL on
   Android phones with a Qualcomm Adreno 700-series or newer GPU (roughly Snapdragon 8 Gen 1 and later). Other
   Android phones (e.g. Samsung Exynos, MediaTek) fall back to the CPU automatically. The chat header shows
   `GPU` or `CPU` so testers can see which one is used. For a model this small, GPU is not guaranteed to be
   faster than CPU; compare on your test phones.
-- **Better answers:** if SmolLM2-135M is too weak, swap `CHAT_MODEL` in `src/config/models.ts` for
+- **Better English answers:** if SmolLM2-135M is too weak, swap `CHAT_MODEL` in `src/config/models.ts` for
   SmolLM2-360M (271 MB) or Qwen2.5-0.5B (491 MB); the URLs are in the comment there.
 
 Other libraries: [`@op-engineering/op-sqlite`](https://github.com/OP-Engineering/op-sqlite) (SQLite with
-sqlite-vec built in), `expo-file-system` (model download with progress and pause).
+sqlite-vec built in), `expo-file-system` (model download with progress and pause), `expo-localization`
+(phone language).
 
 ## 3. App size
 
 **Installed app (before any download): ~117 MB.** This is the measured size of a release APK
-for 64-bit Android phones (arm64). Most of it is the llama.cpp engine, which ships several builds tuned for
+for 64-bit Android phones (arm64), measured before Spanish support was added; the Spanish text and the
+language module add well under 1 MB. Most of it is the llama.cpp engine, which ships several builds tuned for
 different phone CPUs; the right one is picked at runtime. The app contains the FAQ data but no AI model.
 iOS has not been built yet, so there is no iOS figure.
 
 **Downloaded on first launch** (one time, needs internet):
 
-| Chat model (SmolLM2-135M) | + Embedding model | **Total download** |
-| ------------------------- | ----------------- | ------------------ |
-| 105 MB                    | 25 MB             | **130 MB**         |
+| Chat model (SmolLM2-135M) | + Embedding model (multilingual) | **Total download** |
+| ------------------------- | -------------------------------- | ------------------ |
+| 105 MB                    | 125 MB                           | **230 MB**         |
 
-**Total storage after setup:** ~117 MB app + 130 MB models. The SQLite database
-itself is tiny (the 52 FAQs and their vectors are well under 1 MB). The app checks for free space before
-downloading and shows an error instead of starting if there is not enough room.
+**Total storage after setup:** ~117 MB app + 230 MB models. The SQLite database itself is small (the FAQs in
+two languages and their 454 vectors are under 1 MB). The app checks for free space before downloading and
+shows an error instead of starting if there is not enough room. Model files from older app versions are
+deleted automatically.
 
 ## 4. When the chatbot becomes available
 
@@ -87,8 +141,8 @@ first time the app is opened; the user doesn't need to tap anything.
 | Step                               | What the user sees                             | Roughly how long                                                      |
 | ---------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
 | 1. Install app and open it         | Download starts by itself                      | —                                                                     |
-| 2. Download the models (130 MB)    | Progress bar with MB and %, and a Pause button | Depends on network: 130 MB is ~20 s at 50 Mbit/s, ~2 min at 10 Mbit/s |
-| 3. Build the FAQ vector index      | "Building vector index… 12/52"                 | A few seconds (estimate)                                              |
+| 2. Download the models (230 MB)    | Progress bar with MB and %, and a Pause button | Depends on network: 230 MB is ~40 s at 50 Mbit/s, ~3 min at 10 Mbit/s |
+| 3. Build the FAQ search index      | "Building search index… 120/454"               | Roughly 5–30 s depending on the phone (estimate)                      |
 | 4. Load the chat model into memory | "Loading SmolLM2 135M Instruct…"               | A few seconds (estimate)                                              |
 | 5. **Chatbot ready**               | Chat screen                                    |                                                                       |
 
@@ -102,23 +156,25 @@ Notes:
   A half-downloaded file is never used.
 - The download starts on any connection, including mobile data. A production app should ask first, or wait
   for Wi-Fi.
-- Step 3 runs again only when the FAQ data changes (see "Changing the FAQ data").
-- The timings for steps 3 and 4 and the answer speed have **not been measured on a real phone yet**. They
-  depend on the phone; a recent mid-range phone should answer within a few seconds with the default model.
+- Step 3 runs again only when the FAQ data or the embedding model changes (see "Changing the FAQ data").
+- The timings for steps 3 and 4 and the answer speed have **not been measured on a real phone yet**.
 
 ## 5. Testing: the FAQ list
 
 Tap **FAQ list** in the chat header (or **Browse all FAQs** on the empty chat) to see every FAQ stored in
-SQLite, grouped by category with a filter box. Tap a question to send it to the chatbot. Testers should also
-try:
+SQLite, in the selected language, grouped by category with a filter box. Tap a question to send it to the
+chatbot. Testers should also try:
 
-- reworded questions ("how do I get my money back?") to check the vector search finds the right FAQ;
-- off-topic questions ("what's the weather?") to check the bot says it doesn't know instead of inventing.
+- reworded questions in both languages ("how do I get my money back?", "¿cuándo me devuelven el dinero?");
+- Spanish without accents or question marks ("como cancelo mi pedido"), which is how people often type;
+- off-topic questions ("what's the weather?", "¿qué hora es?") to check the bot says it doesn't know.
 
 ## 6. Changing the FAQ data
 
-Edit `src/data/faq.json` and **bump `version`**. On next launch the rows are re-loaded into SQLite and the
-vectors are rebuilt.
+Edit `src/data/faq.json` and **bump `version`**. Each FAQ needs `en` and `es` blocks with `question`,
+`answer` and at least two `alternates` (other ways people ask it; this is the single biggest lever for
+matching accuracy). On next launch the rows are re-loaded into SQLite and the vectors are rebuilt. After
+editing, re-run the accuracy test (section 1) and add test questions for new FAQs.
 
 ## Project layout
 
@@ -129,7 +185,9 @@ src/data/faq.json          FAQ dataset (52 sample entries, fictional store)
 src/db/faqStore.ts         SQLite schema, seeding, vec0 KNN search (+ JS cosine fallback)
 src/models/modelFiles.ts   Download / check / delete GGUF files
 src/llm/engine.ts          llama.rn wrapper: embedder + generator
-src/rag/                   Relevance check, prompt building, orchestration (unit tested)
+src/i18n/                  EN/ES app text, phone-language detection
+src/rag/                   Language detection, keyword index, ranking, prompt, orchestration (unit tested)
+src/rag/__fixtures__/      Held-out accuracy test questions
 src/ui/                    useAssistant state machine, SetupScreen, ChatScreen, FaqListModal
 ```
 
@@ -182,10 +240,11 @@ npm run lint && npm run typecheck && npm test && npm run format:check
 
 ## POC limitations / next steps
 
-- Tiny models paraphrase imperfectly. Every answer shows the matched FAQ entries with a match %, and if the
-  model returns nothing the best FAQ answer is shown word for word. A larger model (see section 2) gives
-  noticeably better answers.
-- The 45% relevance cutoff (`src/rag/retrieval.ts`) is a starting guess; tune it on real questions.
+- The tiny LLM paraphrases English answers imperfectly. Every answer shows the matched FAQ question with a
+  match %, and if the model returns nothing the FAQ answer is shown word for word. If even English answers
+  should be word for word, the chat model can be dropped entirely, saving its 105 MB download.
+- The thresholds (`src/rag/ranking.ts`) were tuned on 120 test questions; re-tune them on real user
+  questions once testers have collected some.
 - Embeddings are computed on the phone at first launch. For large datasets, precompute them at build time
   with the same model and ship a pre-filled SQLite file instead.
 - No chat history is sent to the model (each question is answered on its own), which keeps it fast.

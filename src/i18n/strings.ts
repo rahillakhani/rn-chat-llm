@@ -1,0 +1,88 @@
+import { getLocales } from 'expo-localization';
+
+import type { Lang } from './lang';
+
+export const STRINGS = {
+  en: {
+    setupTitle: 'Setting up the offline assistant',
+    setupBody: (size: string) =>
+      `One-time download of the AI models (${size} total). After this, the chatbot works without internet.`,
+    downloading: (label: string) => `Downloading ${label}`,
+    pause: 'Pause',
+    pausedTitle: 'Download paused',
+    pausedBody: 'The chatbot needs the AI models before it can answer questions.',
+    failedTitle: 'Setup failed',
+    resume: 'Resume download',
+    tryAgain: 'Try again',
+    loading: 'Loading FAQ database and models…',
+    loadingModel: (label: string) => `Loading ${label}…`,
+    indexing: (done: number, total: number) => `Building search index… ${done}/${total}`,
+    chatTitle: 'FAQ Assistant',
+    faqList: 'FAQ list',
+    emptyHint: 'Ask anything about orders, shipping, returns… in English or Spanish.',
+    browseFaqs: 'Browse all FAQs',
+    suggestions: ['How do I reset my password?', 'When do I get my refund?', 'Do you ship abroad?'],
+    placeholder: 'Type your question',
+    send: 'Send',
+    stop: 'Stop',
+    searching: 'Searching the FAQ…',
+    sourceLabel: (question: string, pct: number) => `↳ ${question} (${pct}% match)`,
+    didYouMean: 'Did you mean:',
+    notSure: "I'm not sure which question you mean. Is it one of these?",
+    noMatch:
+      "Sorry, I couldn't find anything about that in our FAQ. Try rephrasing, or contact support from Profile > Help.",
+    error: (message: string) => `Something went wrong: ${message}`,
+    faqListTitle: 'FAQ list',
+    faqListSub: (n: number) => `${n} questions · tap one to ask the chatbot`,
+    close: 'Close',
+    filter: 'Filter questions',
+    noFilterMatch: (filter: string) => `No questions match “${filter}”.`,
+    askHint: 'Asks this question in the chat',
+  },
+  es: {
+    setupTitle: 'Preparando el asistente sin conexión',
+    setupBody: (size: string) =>
+      `Descarga única de los modelos de IA (${size} en total). Después, el chatbot funciona sin internet.`,
+    downloading: (label: string) => `Descargando ${label}`,
+    pause: 'Pausar',
+    pausedTitle: 'Descarga en pausa',
+    pausedBody: 'El chatbot necesita los modelos de IA para poder responder.',
+    failedTitle: 'Error en la configuración',
+    resume: 'Reanudar descarga',
+    tryAgain: 'Reintentar',
+    loading: 'Cargando la base de datos de preguntas y los modelos…',
+    loadingModel: (label: string) => `Cargando ${label}…`,
+    indexing: (done: number, total: number) => `Creando el índice de búsqueda… ${done}/${total}`,
+    chatTitle: 'Asistente de preguntas',
+    faqList: 'Preguntas',
+    emptyHint: 'Pregunta lo que quieras sobre pedidos, envíos, devoluciones… en español o inglés.',
+    browseFaqs: 'Ver todas las preguntas',
+    suggestions: [
+      '¿Cómo restablezco mi contraseña?',
+      '¿Cuándo recibiré mi reembolso?',
+      '¿Hacéis envíos internacionales?',
+    ],
+    placeholder: 'Escribe tu pregunta',
+    send: 'Enviar',
+    stop: 'Parar',
+    searching: 'Buscando en las preguntas frecuentes…',
+    sourceLabel: (question: string, pct: number) => `↳ ${question} (${pct}% de coincidencia)`,
+    didYouMean: '¿Quisiste decir?:',
+    notSure: 'No estoy seguro de qué pregunta quieres decir. ¿Es alguna de estas?',
+    noMatch:
+      'Lo siento, no encontré nada sobre eso en nuestras preguntas frecuentes. Prueba a reformular la pregunta o contacta con soporte desde Perfil > Ayuda.',
+    error: (message: string) => `Algo salió mal: ${message}`,
+    faqListTitle: 'Preguntas frecuentes',
+    faqListSub: (n: number) => `${n} preguntas · toca una para preguntársela al chatbot`,
+    close: 'Cerrar',
+    filter: 'Filtrar preguntas',
+    noFilterMatch: (filter: string) => `Ninguna pregunta coincide con “${filter}”.`,
+    askHint: 'Hace esta pregunta en el chat',
+  },
+} satisfies Record<Lang, unknown>;
+
+export type Strings = (typeof STRINGS)['en'];
+
+export function deviceLang(): Lang {
+  return getLocales()[0]?.languageCode === 'es' ? 'es' : 'en';
+}

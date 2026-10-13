@@ -10,14 +10,6 @@ export function blobToFloat32(blob: ArrayBuffer): Float32Array {
   return new Float32Array(blob.slice(0));
 }
 
-export function l2Normalize(vector: Float32Array): Float32Array {
-  let sumSquares = 0;
-  for (const v of vector) sumSquares += v * v;
-  const norm = Math.sqrt(sumSquares);
-  if (norm === 0) return vector;
-  return vector.map((v) => v / norm);
-}
-
 export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
   if (a.length !== b.length) {
     throw new Error(`Vector length mismatch: ${a.length} vs ${b.length}`);
@@ -34,17 +26,4 @@ export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
   }
   if (normA === 0 || normB === 0) return 0;
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-}
-
-export type ScoredId = { id: number; similarity: number };
-
-export function topKBySimilarity(
-  query: Float32Array,
-  candidates: readonly { id: number; vector: Float32Array }[],
-  k: number,
-): ScoredId[] {
-  return candidates
-    .map((c) => ({ id: c.id, similarity: cosineSimilarity(query, c.vector) }))
-    .sort((a, b) => b.similarity - a.similarity)
-    .slice(0, k);
 }

@@ -1,31 +1,30 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { CHAT_MODEL, EMBEDDING_MODEL } from '../config/models';
+import { REQUIRED_MODELS } from '../config/models';
+import type { Strings } from '../i18n/strings';
 import { formatBytes } from '../models/modelFiles';
 import { colors } from './theme';
 import type { AssistantState } from './useAssistant';
 
 type Props = {
   state: Exclude<AssistantState, { status: 'READY' }>;
+  t: Strings;
   onRetry: () => void;
   onCancel: () => void;
 };
 
-const TOTAL_DOWNLOAD_BYTES = CHAT_MODEL.sizeBytes + EMBEDDING_MODEL.sizeBytes;
+const TOTAL_DOWNLOAD_BYTES = REQUIRED_MODELS.reduce((sum, m) => sum + m.sizeBytes, 0);
 
 /** Shown until the chatbot is ready: first-launch download progress, then model loading. */
-export function SetupScreen({ state, onRetry, onCancel }: Props) {
+export function SetupScreen({ state, t, onRetry, onCancel }: Props) {
   if (state.status === 'DOWNLOADING') {
     const { bytesWritten, totalBytes } = state.progress;
     const pct = totalBytes > 0 ? Math.min(100, (bytesWritten / totalBytes) * 100) : 0;
     return (
       <View style={styles.center}>
-        <Text style={styles.title}>Setting up the offline assistant</Text>
-        <Text style={styles.muted}>
-          One-time download of the AI models ({formatBytes(TOTAL_DOWNLOAD_BYTES)} total). After
-          this, the chatbot works without internet.
-        </Text>
-        <Text style={styles.label}>Downloading {state.label}</Text>
+        <Text style={styles.title}>{t.setupTitle}</Text>
+        <Text style={styles.muted}>{t.setupBody(formatBytes(TOTAL_DOWNLOAD_BYTES))}</Text>
+        <Text style={styles.label}>{t.downloading(state.label)}</Text>
         <View style={styles.track} accessibilityRole="progressbar">
           <View style={[styles.fill, { width: `${pct}%` }]} />
         </View>
@@ -33,40 +32,35 @@ export function SetupScreen({ state, onRetry, onCancel }: Props) {
           {formatBytes(bytesWritten)} / {formatBytes(totalBytes)} ({pct.toFixed(0)}%)
         </Text>
         <Pressable style={styles.secondaryButton} onPress={onCancel} accessibilityRole="button">
-          <Text style={styles.secondaryButtonText}>Pause</Text>
+          <Text style={styles.secondaryButtonText}>{t.pause}</Text>
         </Pressable>
       </View>
     );
   }
 
   if (state.status === 'PAUSED' || state.status === 'ERROR') {
+    const paused = state.status === 'PAUSED';
     return (
       <View style={styles.center}>
-        <Text style={styles.title}>
-          {state.status === 'PAUSED' ? 'Download paused' : 'Setup failed'}
-        </Text>
-        <Text style={state.status === 'ERROR' ? styles.error : styles.muted}>
-          {state.status === 'ERROR'
-            ? state.message
-            : 'The chatbot needs the AI models before it can answer questions.'}
+        <Text style={styles.title}>{paused ? t.pausedTitle : t.failedTitle}</Text>
+        <Text style={paused ? styles.muted : styles.error}>
+          {state.status === 'ERROR' ? state.message : t.pausedBody}
         </Text>
         <Pressable style={styles.primaryButton} onPress={onRetry} accessibilityRole="button">
-          <Text style={styles.primaryButtonText}>
-            {state.status === 'PAUSED' ? 'Resume download' : 'Try again'}
-          </Text>
+          <Text style={styles.primaryButtonText}>{paused ? t.resume : t.tryAgain}</Text>
         </Pressable>
       </View>
     );
   }
 
+  let message = t.loading;
+  if (state.status === 'INDEXING') message = t.indexing(state.done, state.total);
+  else if (state.model) message = t.loadingModel(state.model);
+
   return (
     <View style={styles.center}>
       <ActivityIndicator size="large" color={colors.primary} />
-      <Text style={styles.muted}>
-        {state.status === 'LOADING'
-          ? state.message
-          : `Building vector index… ${state.done}/${state.total}`}
-      </Text>
+      <Text style={styles.muted}>{message}</Text>
     </View>
   );
 }

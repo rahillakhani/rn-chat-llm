@@ -1,9 +1,6 @@
-import type { RetrievedFaq } from './retrieval';
+import type { FaqItem } from '../data/faqSchema';
 
 export type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string };
-
-export const NO_MATCH_REPLY =
-  "Sorry, I couldn't find anything about that in our FAQ. Try rephrasing, or contact support from Profile > Help.";
 
 const SYSTEM_PROMPT = [
   'You are a customer support assistant.',
@@ -18,7 +15,7 @@ const SYSTEM_PROMPT = [
  */
 export function buildRagMessages(
   question: string,
-  context: readonly RetrievedFaq[],
+  context: readonly Pick<FaqItem, 'question' | 'answer'>[],
 ): ChatMessage[] {
   const faqBlock = context
     .map((item, i) => `[${i + 1}] Q: ${item.question}\nA: ${item.answer}`)
