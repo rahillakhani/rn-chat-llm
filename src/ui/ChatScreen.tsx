@@ -13,8 +13,9 @@ import {
 import type { FaqItem } from '../data/faqSchema';
 import type { Lang } from '../i18n/lang';
 import { STRINGS, type Strings } from '../i18n/strings';
-import type { BotAnswer } from '../rag/faqBot';
+import type { AnswerMode, BotAnswer } from '../rag/faqBot';
 import { FaqListModal } from './FaqListModal';
+import { SegmentedToggle } from './SegmentedToggle';
 import { colors } from './theme';
 import type { AssistantState } from './useAssistant';
 
@@ -26,6 +27,8 @@ type BotMessage = {
   /** Language of the reply (follows the question), for its labels. */
   lang: Lang;
   source?: { question: string; similarity: number };
+  /** true when the LLM wrote the text, false when it is the FAQ answer as written. */
+  generated?: boolean;
   /** Tappable questions: "Did you mean…" runners-up, or the choices when the bot isn't sure. */
   related: FaqItem[];
   relatedIsChoice?: boolean;
@@ -38,7 +41,12 @@ type Props = {
   lang: Lang;
   t: Strings;
   onChangeLang: (lang: Lang) => void;
-  ask: (question: string, uiLang: Lang, onToken: (partial: string) => void) => Promise<BotAnswer>;
+  ask: (
+    question: string,
+    uiLang: Lang,
+    mode: AnswerMode,
+    onToken: (partial: string) => void,
+  ) => Promise<BotAnswer>;
   listFaqs: (lang: Lang) => Promise<FaqItem[]>;
   onStop: () => void;
 };
@@ -48,6 +56,8 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [showFaqs, setShowFaqs] = useState(false);
+  // Testing switch: compare FAQ-as-written answers with LLM-rewritten ones on the same question.
+  const [mode, setMode] = useState<AnswerMode>('faq');
   const nextId = useRef(0);
   const listRef = useRef<FlatList<Message>>(null);
 
@@ -71,7 +81,9 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
         { id: botId, role: 'bot', text: '', pending: true, lang, related: [] },
       ]);
       try {
-        const answer = await ask(question, lang, (partial) => updateBot(botId, { text: partial }));
+        const answer = await ask(question, lang, mode, (partial) =>
+          updateBot(botId, { text: partial }),
+        );
         updateBot(
           botId,
           answer.kind === 'ANSWER'
@@ -80,6 +92,7 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
                 pending: false,
                 lang: answer.lang,
                 source: answer.source,
+                generated: answer.generated,
                 related: answer.related,
               }
             : answer.kind === 'SUGGEST'
@@ -101,7 +114,7 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
         setBusy(false);
       }
     },
-    [ask, busy, lang, t, updateBot],
+    [ask, busy, lang, mode, t, updateBot],
   );
 
   return (
@@ -118,21 +131,24 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
           </Text>
         </View>
         <View style={styles.headerActions}>
-          <View style={styles.langToggle} accessibilityRole="radiogroup">
-            {(['en', 'es'] as const).map((l) => (
-              <Pressable
-                key={l}
-                onPress={() => onChangeLang(l)}
-                accessibilityRole="radio"
-                accessibilityState={{ selected: l === lang }}
-                style={[styles.langOption, l === lang && styles.langOptionActive]}
-              >
-                <Text style={[styles.langText, l === lang && styles.langTextActive]}>
-                  {l.toUpperCase()}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
+          <SegmentedToggle
+            accessibilityLabel={t.languageToggle}
+            options={[
+              { value: 'en', label: 'EN' },
+              { value: 'es', label: 'ES' },
+            ]}
+            value={lang}
+            onChange={onChangeLang}
+          />
+          <SegmentedToggle
+            accessibilityLabel={t.answerModeToggle}
+            options={[
+              { value: 'faq', label: t.modeFaq },
+              { value: 'llm', label: t.modeAi },
+            ]}
+            value={mode}
+            onChange={setMode}
+          />
           <Pressable onPress={() => setShowFaqs(true)} accessibilityRole="button">
             <Text style={styles.link}>{t.faqList}</Text>
           </Pressable>
@@ -180,6 +196,11 @@ export function ChatScreen({ state, lang, t, onChangeLang, ask, listFaqs, onStop
               <Text style={styles.botText}>
                 {item.text || (item.pending ? STRINGS[item.lang].searching : '')}
               </Text>
+              {item.source && item.generated !== undefined && (
+                <Text style={[styles.badge, item.generated && styles.badgeAi]}>
+                  {item.generated ? STRINGS[item.lang].aiBadge : STRINGS[item.lang].fromFaqBadge}
+                </Text>
+              )}
               {item.source && (
                 <Text style={styles.sourceText}>
                   {STRINGS[item.lang].sourceLabel(
@@ -253,17 +274,6 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 18, fontWeight: '700', color: colors.text },
   headerSub: { fontSize: 12, color: colors.muted },
   headerActions: { alignItems: 'flex-end', gap: 6 },
-  langToggle: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  langOption: { paddingHorizontal: 10, paddingVertical: 4 },
-  langOptionActive: { backgroundColor: colors.primary },
-  langText: { fontSize: 12, fontWeight: '600', color: colors.muted },
-  langTextActive: { color: colors.primaryText },
   link: { color: colors.primary, fontSize: 14 },
   list: { padding: 16, gap: 10, flexGrow: 1 },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 },
@@ -287,6 +297,8 @@ const styles = StyleSheet.create({
   },
   userText: { color: colors.primaryText, fontSize: 15 },
   botText: { color: colors.text, fontSize: 15 },
+  badge: { marginTop: 8, fontSize: 11, fontWeight: '600', color: colors.muted },
+  badgeAi: { color: colors.danger },
   sources: { marginTop: 8, gap: 6, alignItems: 'flex-start' },
   sourceText: { color: colors.muted, fontSize: 12, marginTop: 6 },
   inputRow: {

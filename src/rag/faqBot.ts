@@ -15,6 +15,12 @@ export type BotDeps = {
   lexical: LexicalIndex;
 };
 
+/**
+ * 'faq': show the matched FAQ answer exactly as written (both languages).
+ * 'llm': English answers are rewritten by the small LLM; Spanish stays FAQ text (the LLM writes poor Spanish).
+ */
+export type AnswerMode = 'faq' | 'llm';
+
 export type BotAnswer =
   | { kind: 'NO_MATCH'; lang: Lang }
   /** Close but not confident: the user picks from these questions. */
@@ -54,12 +60,13 @@ export async function prepareIndex(
 
 /**
  * Answer from the FAQ only. The reply language follows the question (falling back to the app
- * language). English answers are rephrased by the small LLM; Spanish answers are the FAQ text
- * word for word, because the lightest LLM writes poor Spanish.
+ * language). In 'llm' mode English answers are rephrased by the small LLM; otherwise, and always
+ * for Spanish, the FAQ answer is shown word for word.
  */
 export async function answerQuestion(
   question: string,
   uiLang: Lang,
+  mode: AnswerMode,
   deps: BotDeps,
   onToken: (partial: string) => void,
   settings: MatchSettings = DEFAULT_MATCH_SETTINGS,
@@ -86,7 +93,7 @@ export async function answerQuestion(
   if (!best) return { kind: 'NO_MATCH', lang };
   const source = { ...best, similarity: decision.best.similarity };
 
-  if (lang !== 'en') {
+  if (mode === 'faq' || lang !== 'en') {
     return { kind: 'ANSWER', lang, text: best.answer, generated: false, source, related };
   }
 

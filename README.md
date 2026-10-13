@@ -13,7 +13,7 @@ through [`llama.rn`](https://github.com/mybigday/llama.rn):
 - a **multilingual embedding model** that turns text into a list of 384 numbers (a vector). Texts with the same
   meaning get similar vectors **even across languages**, so "¿Dónde está mi pedido?" and "Where is my order?"
   land next to each other;
-- a **chat model (the LLM)** that rewrites English answers in plain language.
+- a **chat model (the LLM)** that can rewrite English answers in plain language, when **AI** answer mode is on.
 
 **Setup (once, on first launch):**
 
@@ -38,14 +38,26 @@ through [`llama.rn`](https://github.com/mybigday/llama.rn):
    │      0.50 – 0.56   → "Not sure, is it one of these?" + top 3 questions to tap
    │      < 0.50        → "Sorry, I couldn't find that in our FAQ"
    ▼  6. Answer, in the language of the question:
-          Spanish → the Spanish FAQ answer, word for word
-          English → the LLM rewrites the English FAQ answer (falls back to the FAQ text if it fails)
+          FAQ mode (default) → the FAQ answer exactly as written, English or Spanish
+          AI mode            → English: the LLM rewrites the FAQ answer (FAQ text if it returns nothing)
+                               Spanish: still the FAQ answer as written
           + "Did you mean…" buttons for FAQs that scored almost as high
           + the matched FAQ question and its match %
 ```
 
 Answers always come from the FAQ: the LLM only ever sees the one matched FAQ entry, and it is never asked
 when nothing matches. Spanish answers skip the LLM because the lightest model writes poor Spanish.
+
+### Answer mode: FAQ vs AI (testing switch)
+
+The **FAQ | AI** switch in the chat header lets testers compare both on the same question. It starts on
+**FAQ** each time the app opens. Each reply is labelled **From FAQ** or **AI-written · may be inaccurate**.
+
+Why FAQ is the default: SmolLM2-135M was tested on 10 English questions, 3 runs each, with the app's exact
+prompt. Of 30 answers, **11 copied the prompt back** (so one reply looked like several Q&As), **7 invented
+content** such as fake links, and most of the remaining 12 were refusals or wrong ("I don't know how to reset my
+password"). For comparison, Qwen2.5-0.5B (491 MB) produced 30/30 clean answers but sometimes dropped details
+such as prices or steps. Showing the FAQ text as written is the only option that is always complete.
 
 ### Languages
 
@@ -88,10 +100,10 @@ LIVE_EMBEDDINGS_URL=http://localhost:8080 npm run eval:retrieval -- --silent=fal
 
 ## 2. Which models we use
 
-| Role       | Model                                                                                                                                    | Download   | Notes                                                    |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------------------------------------------------------- |
-| Chat LLM   | [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), Q4_K_M GGUF                                         | **105 MB** | Lightest instruct model. English answers only            |
-| Embeddings | [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2), Q4_K_M GGUF | **125 MB** | 384-dim vectors, 50+ languages incl. English and Spanish |
+| Role       | Model                                                                                                                                    | Download   | Notes                                                       |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----------------------------------------------------------- |
+| Chat LLM   | [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), Q4_K_M GGUF                                         | **105 MB** | Lightest instruct model. Only used in AI mode, English only |
+| Embeddings | [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2), Q4_K_M GGUF | **125 MB** | 384-dim vectors, 50+ languages incl. English and Spanish    |
 
 - The app always uses **SmolLM2-135M**, the lightest model. There is no model picker: everything is downloaded
   automatically on first launch.
@@ -240,9 +252,9 @@ npm run lint && npm run typecheck && npm test && npm run format:check
 
 ## POC limitations / next steps
 
-- The tiny LLM paraphrases English answers imperfectly. Every answer shows the matched FAQ question with a
-  match %, and if the model returns nothing the FAQ answer is shown word for word. If even English answers
-  should be word for word, the chat model can be dropped entirely, saving its 105 MB download.
+- In AI mode the 135M LLM is unreliable (see "Answer mode"). If testers settle on FAQ mode, the chat model can
+  be dropped entirely, cutting the first-launch download from 230 MB to 125 MB. If they prefer AI answers,
+  Qwen2.5-0.5B is the smallest model that answered cleanly in testing (download ~615 MB in total).
 - The thresholds (`src/rag/ranking.ts`) were tuned on 120 test questions; re-tune them on real user
   questions once testers have collected some.
 - Embeddings are computed on the phone at first launch. For large datasets, precompute them at build time

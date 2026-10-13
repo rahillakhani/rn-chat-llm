@@ -13,7 +13,13 @@ import {
   modelFile,
   type DownloadProgress,
 } from '../models/modelFiles';
-import { answerQuestion, prepareIndex, type BotAnswer, type BotDeps } from '../rag/faqBot';
+import {
+  answerQuestion,
+  prepareIndex,
+  type AnswerMode,
+  type BotAnswer,
+  type BotDeps,
+} from '../rag/faqBot';
 
 export type AssistantState =
   | { status: 'DOWNLOADING'; label: string; progress: DownloadProgress }
@@ -116,11 +122,12 @@ export function useAssistant() {
     async (
       question: string,
       uiLang: Lang,
+      mode: AnswerMode,
       onToken: (partial: string) => void,
     ): Promise<BotAnswer> => {
       const rt = runtime.current;
       if (!rt) throw new Error('Assistant is not ready yet.');
-      return answerQuestion(question, uiLang, rt, onToken);
+      return answerQuestion(question, uiLang, mode, rt, onToken);
     },
     [],
   );

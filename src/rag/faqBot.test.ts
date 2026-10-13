@@ -151,7 +151,14 @@ describe('answerQuestion', () => {
   it('answers an English question with the LLM, grounded in the English FAQ', async () => {
     const { deps, generator } = await setup('Use Forgot password on the login screen.');
 
-    const answer = await answerQuestion('i lost my password', 'es', deps, () => {}, settings);
+    const answer = await answerQuestion(
+      'i lost my password',
+      'es',
+      'llm',
+      deps,
+      () => {},
+      settings,
+    );
 
     expect(answer).toMatchObject({
       kind: 'ANSWER',
@@ -164,12 +171,34 @@ describe('answerQuestion', () => {
     expect(generator.prompts[0]).not.toContain('Within 5 business days.');
   });
 
-  it('answers a Spanish question with the Spanish FAQ text, without the LLM', async () => {
+  it('in FAQ mode answers an English question with the FAQ text, without the LLM', async () => {
+    const { deps, generator } = await setup();
+
+    const answer = await answerQuestion(
+      'i lost my password',
+      'en',
+      'faq',
+      deps,
+      () => {},
+      settings,
+    );
+
+    expect(answer).toMatchObject({
+      kind: 'ANSWER',
+      lang: 'en',
+      generated: false,
+      text: 'Tap Forgot password.',
+    });
+    expect(generator.prompts).toHaveLength(0);
+  });
+
+  it('answers a Spanish question with the Spanish FAQ text, without the LLM even in AI mode', async () => {
     const { deps, generator } = await setup();
 
     const answer = await answerQuestion(
       '¿dónde está mi reembolso?',
       'en',
+      'llm',
       deps,
       () => {},
       settings,
@@ -187,13 +216,13 @@ describe('answerQuestion', () => {
 
   it('uses the UI language when the question has no language hints', async () => {
     const { deps } = await setup();
-    const answer = await answerQuestion('refund', 'es', deps, () => {}, settings);
+    const answer = await answerQuestion('refund', 'es', 'llm', deps, () => {}, settings);
     expect(answer).toMatchObject({ kind: 'ANSWER', lang: 'es', text: 'En 5 días hábiles.' });
   });
 
   it('offers close runners-up as related questions in the reply language', async () => {
     const { deps } = await setup();
-    const answer = await answerQuestion('contraseña y reembolso', 'en', deps, () => {}, {
+    const answer = await answerQuestion('contraseña y reembolso', 'en', 'llm', deps, () => {}, {
       ...settings,
       minScore: 0.7,
     });
@@ -204,7 +233,14 @@ describe('answerQuestion', () => {
 
   it('asks the user to pick when the best match is close but not confident', async () => {
     const { deps, generator } = await setup();
-    const answer = await answerQuestion('contraseña y reembolso', 'en', deps, () => {}, settings);
+    const answer = await answerQuestion(
+      'contraseña y reembolso',
+      'en',
+      'llm',
+      deps,
+      () => {},
+      settings,
+    );
     expect(answer.kind === 'SUGGEST' && answer.options.map((o) => [o.id, o.lang])).toEqual([
       [1, 'es'],
       [2, 'es'],
@@ -214,14 +250,28 @@ describe('answerQuestion', () => {
 
   it('returns NO_MATCH without calling the LLM when nothing in the FAQ matches', async () => {
     const { deps, generator } = await setup();
-    const answer = await answerQuestion('¿qué tiempo hace mañana?', 'en', deps, () => {}, settings);
+    const answer = await answerQuestion(
+      '¿qué tiempo hace mañana?',
+      'en',
+      'llm',
+      deps,
+      () => {},
+      settings,
+    );
     expect(answer).toEqual({ kind: 'NO_MATCH', lang: 'es' });
     expect(generator.prompts).toHaveLength(0);
   });
 
   it('falls back to the FAQ answer when the LLM returns nothing', async () => {
     const { deps } = await setup('<|im_end|>');
-    const answer = await answerQuestion('where is my refund', 'en', deps, () => {}, settings);
+    const answer = await answerQuestion(
+      'where is my refund',
+      'en',
+      'llm',
+      deps,
+      () => {},
+      settings,
+    );
     expect(answer).toMatchObject({ text: 'Within 5 business days.', generated: false });
   });
 });
