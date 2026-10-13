@@ -1,0 +1,317 @@
+{
+  "version": 2,
+  "items": [
+    {
+      "id": 1,
+      "category": "Account",
+      "question": "How do I create an account?",
+      "answer": "Tap 'Sign up' on the welcome screen, enter your email address and a password of at least 8 characters, then confirm the 6-digit code we email you."
+    },
+    {
+      "id": 2,
+      "category": "Account",
+      "question": "How do I reset my password?",
+      "answer": "On the login screen tap 'Forgot password', enter your registered email, and follow the reset link we send. The link expires after 30 minutes."
+    },
+    {
+      "id": 3,
+      "category": "Account",
+      "question": "Can I change the email address on my account?",
+      "answer": "Yes. Go to Profile > Account settings > Email, enter the new address, and confirm it with the verification code sent to that address."
+    },
+    {
+      "id": 4,
+      "category": "Account",
+      "question": "How do I delete my account?",
+      "answer": "Go to Profile > Account settings > Delete account. Deletion is permanent after a 14-day grace period, during which you can log in to cancel it."
+    },
+    {
+      "id": 5,
+      "category": "Account",
+      "question": "How do I turn on two-factor authentication?",
+      "answer": "Open Profile > Security > Two-factor authentication and choose either an authenticator app or SMS codes. We recommend an authenticator app."
+    },
+    {
+      "id": 6,
+      "category": "Orders",
+      "question": "How can I track my order?",
+      "answer": "Open Orders, select the order, and tap 'Track shipment'. Tracking becomes available once the order has shipped, usually within 1 business day."
+    },
+    {
+      "id": 7,
+      "category": "Orders",
+      "question": "Can I cancel an order after placing it?",
+      "answer": "You can cancel an order from the Orders screen until it has shipped. Once shipped, you will need to request a return instead."
+    },
+    {
+      "id": 8,
+      "category": "Orders",
+      "question": "Can I change the delivery address of an order?",
+      "answer": "Delivery addresses can be changed from the order details screen only before the order ships. After shipping, contact support and we will try to redirect it with the carrier."
+    },
+    {
+      "id": 9,
+      "category": "Orders",
+      "question": "Why is my order delayed?",
+      "answer": "Delays are usually caused by carrier backlogs, weather, or address verification issues. Check the tracking page for the latest status; if there has been no update for 5 business days, contact support."
+    },
+    {
+      "id": 10,
+      "category": "Shipping",
+      "question": "How long does shipping take?",
+      "answer": "Standard shipping takes 3 to 5 business days. Express shipping takes 1 to 2 business days. Delivery times for remote areas may be longer."
+    },
+    {
+      "id": 11,
+      "category": "Shipping",
+      "question": "How much does shipping cost?",
+      "answer": "Standard shipping is free on orders over $50 and costs $4.99 otherwise. Express shipping costs $12.99 for any order."
+    },
+    {
+      "id": 12,
+      "category": "Shipping",
+      "question": "Do you ship internationally?",
+      "answer": "Yes, we ship to over 40 countries. International shipping costs and delivery times are shown at checkout once you enter your address. Import duties are paid by the recipient."
+    },
+    {
+      "id": 13,
+      "category": "Returns",
+      "question": "What is your return policy?",
+      "answer": "Unused items in their original packaging can be returned within 30 days of delivery for a full refund. Sale items can be returned within 14 days."
+    },
+    {
+      "id": 14,
+      "category": "Returns",
+      "question": "How do I return an item?",
+      "answer": "Go to Orders, select the order, tap 'Return items', choose the items and a reason, then print the prepaid label or show the QR code at a drop-off point."
+    },
+    {
+      "id": 15,
+      "category": "Returns",
+      "question": "When will I get my refund?",
+      "answer": "Refunds are issued to the original payment method within 5 business days after we receive and inspect the returned item. Your bank may take a few more days to show it."
+    },
+    {
+      "id": 16,
+      "category": "Returns",
+      "question": "Can I exchange an item for a different size?",
+      "answer": "Yes. Start a return, choose 'Exchange' as the option, and pick the new size. We ship the replacement as soon as the original item is scanned by the carrier."
+    },
+    {
+      "id": 17,
+      "category": "Payments",
+      "question": "Which payment methods do you accept?",
+      "answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, Google Pay, and store gift cards."
+    },
+    {
+      "id": 18,
+      "category": "Payments",
+      "question": "Is it safe to save my card in the app?",
+      "answer": "Yes. Card details are tokenized by our PCI-DSS certified payment provider. We never store your full card number on our servers or on your device."
+    },
+    {
+      "id": 19,
+      "category": "Payments",
+      "question": "Why was my payment declined?",
+      "answer": "Payments are usually declined because of incorrect card details, insufficient funds, or a security block by your bank. Double-check your details or contact your bank, then try again."
+    },
+    {
+      "id": 20,
+      "category": "Payments",
+      "question": "Can I pay in installments?",
+      "answer": "Yes, orders over $100 can be split into 4 interest-free installments with our pay-later partner. Choose 'Pay later' at checkout to see if you are eligible."
+    },
+    {
+      "id": 21,
+      "category": "Payments",
+      "question": "How do I use a promo code?",
+      "answer": "Enter the code in the 'Promo code' field on the checkout screen and tap Apply. Only one promo code can be used per order, and codes cannot be combined with gift cards for discounts."
+    },
+    {
+      "id": 22,
+      "category": "Loyalty",
+      "question": "How does the rewards program work?",
+      "answer": "You earn 1 point for every $1 spent. Every 100 points can be redeemed for $5 off a future order. Points expire 12 months after they are earned."
+    },
+    {
+      "id": 23,
+      "category": "Loyalty",
+      "question": "Where can I see my reward points?",
+      "answer": "Your current points balance and expiry dates are shown under Profile > Rewards."
+    },
+    {
+      "id": 24,
+      "category": "App",
+      "question": "How do I turn notifications on or off?",
+      "answer": "Go to Profile > Settings > Notifications to choose which alerts you receive. You can also disable all notifications from your phone's system settings."
+    },
+    {
+      "id": 25,
+      "category": "App",
+      "question": "Does the app work offline?",
+      "answer": "You can browse previously loaded products and view your past orders offline. Placing orders, payments, and tracking require an internet connection."
+    },
+    {
+      "id": 26,
+      "category": "App",
+      "question": "How do I switch to dark mode?",
+      "answer": "Open Profile > Settings > Appearance and choose Light, Dark, or 'Match system'."
+    },
+    {
+      "id": 27,
+      "category": "App",
+      "question": "The app keeps crashing. What should I do?",
+      "answer": "Update to the latest version from the App Store or Google Play, then restart your phone. If it still crashes, reinstall the app and contact support with your device model and OS version."
+    },
+    {
+      "id": 28,
+      "category": "Privacy",
+      "question": "What data do you collect about me?",
+      "answer": "We collect the information you provide (name, email, addresses, orders) and basic usage analytics. We never sell your personal data. See the Privacy Policy in Profile > Legal for details."
+    },
+    {
+      "id": 29,
+      "category": "Privacy",
+      "question": "How can I download a copy of my data?",
+      "answer": "Go to Profile > Privacy > Download my data. We prepare a ZIP file and email you a download link within 48 hours."
+    },
+    {
+      "id": 30,
+      "category": "Support",
+      "question": "How do I contact customer support?",
+      "answer": "Use Profile > Help > Contact us to chat with an agent from 8am to 8pm, Monday to Saturday, or email support@example.com any time. We reply to emails within 24 hours."
+    },
+    {
+      "id": 31,
+      "category": "Support",
+      "question": "I received a damaged or wrong item. What should I do?",
+      "answer": "Report it within 7 days from Orders > select the order > 'Report a problem', and attach a photo. We will send a free replacement or a full refund, and you will not need to return the item."
+    },
+    {
+      "id": 32,
+      "category": "Gift cards",
+      "question": "Do gift cards expire?",
+      "answer": "No, gift cards never expire. You can check the balance under Profile > Wallet > Gift cards."
+    },
+    {
+      "id": 33,
+      "category": "Store pickup",
+      "question": "Can I pick up my order in a store?",
+      "answer": "Yes. Choose 'Click & Collect' at checkout and select a store. Pickup is free, and we notify you when the order is ready, usually within 4 hours."
+    },
+    {
+      "id": 34,
+      "category": "Store pickup",
+      "question": "How long will the store hold my pickup order?",
+      "answer": "Pickup orders are held for 7 days. If you don't collect it by then, the order is cancelled and you receive a full refund."
+    },
+    {
+      "id": 35,
+      "category": "Store pickup",
+      "question": "What do I need to bring to collect my order?",
+      "answer": "Bring the pickup QR code from the order screen, or your order number and a photo ID matching the name on the order."
+    },
+    {
+      "id": 36,
+      "category": "Subscriptions",
+      "question": "What is Acme Plus?",
+      "answer": "Acme Plus is our membership: free express shipping on every order, early access to sales, and double reward points. It costs $9.99 per month or $79 per year."
+    },
+    {
+      "id": 37,
+      "category": "Subscriptions",
+      "question": "How do I cancel my Acme Plus membership?",
+      "answer": "Go to Profile > Membership > Manage and tap 'Cancel membership'. You keep the benefits until the end of the current billing period."
+    },
+    {
+      "id": 38,
+      "category": "Subscriptions",
+      "question": "Is there a free trial for Acme Plus?",
+      "answer": "Yes, new members get a 30-day free trial. You will not be charged if you cancel before the trial ends."
+    },
+    {
+      "id": 39,
+      "category": "Warranty",
+      "question": "Do your products come with a warranty?",
+      "answer": "All electronics include a 1-year manufacturer warranty. Other products are covered for 90 days against manufacturing defects."
+    },
+    {
+      "id": 40,
+      "category": "Warranty",
+      "question": "How do I make a warranty claim?",
+      "answer": "Open Orders, select the item, and tap 'Warranty claim'. Describe the problem and add photos; we reply within 2 business days with next steps."
+    },
+    {
+      "id": 41,
+      "category": "Products",
+      "question": "How do I find my size?",
+      "answer": "Every clothing and shoe product page has a 'Size guide' link with measurements. If you are between sizes, we recommend choosing the larger one."
+    },
+    {
+      "id": 42,
+      "category": "Products",
+      "question": "Can I get notified when an item is back in stock?",
+      "answer": "Yes. On the product page tap 'Notify me' and we will send a push notification and email as soon as it is available again."
+    },
+    {
+      "id": 43,
+      "category": "Products",
+      "question": "Do you offer price matching?",
+      "answer": "We match the price of identical items sold by major retailers within 14 days of your purchase. Contact support with a link to the lower price."
+    },
+    {
+      "id": 44,
+      "category": "Products",
+      "question": "Can I save items for later?",
+      "answer": "Tap the heart icon on any product to add it to your Wishlist. You can view it under Profile > Wishlist on any device you log in to."
+    },
+    {
+      "id": 45,
+      "category": "Gift cards",
+      "question": "How do I buy a gift card?",
+      "answer": "Go to Profile > Wallet > Gift cards > Buy a gift card. Choose an amount from $10 to $500, and we email it to the recipient on the date you choose."
+    },
+    {
+      "id": 46,
+      "category": "Gift cards",
+      "question": "Can I use more than one gift card on an order?",
+      "answer": "Yes, you can apply up to 3 gift cards per order, and pay any remaining amount with another payment method."
+    },
+    {
+      "id": 47,
+      "category": "Orders",
+      "question": "Can I add items to an order I already placed?",
+      "answer": "Items cannot be added to an existing order. Place a new order instead; if both ship to the same address on the same day, we try to combine them."
+    },
+    {
+      "id": 48,
+      "category": "Orders",
+      "question": "Where can I find my invoice?",
+      "answer": "Open Orders, select the order, and tap 'Download invoice'. Invoices are available as PDF once the order has shipped."
+    },
+    {
+      "id": 49,
+      "category": "Payments",
+      "question": "Can I pay with cash on delivery?",
+      "answer": "Cash on delivery is not available. Please use a card, PayPal, Apple Pay, Google Pay, or a gift card."
+    },
+    {
+      "id": 50,
+      "category": "Account",
+      "question": "Can I share my account with family members?",
+      "answer": "Each account is for one person, but you can add up to 5 delivery addresses and send gift cards to family members."
+    },
+    {
+      "id": 51,
+      "category": "App",
+      "question": "Which phones does the app support?",
+      "answer": "The app supports iPhones running iOS 16 or later and Android phones running Android 9 or later."
+    },
+    {
+      "id": 52,
+      "category": "Accessibility",
+      "question": "Does the app support screen readers?",
+      "answer": "Yes. The app works with VoiceOver on iOS and TalkBack on Android, and supports your phone's larger text settings."
+    }
+  ]
+}

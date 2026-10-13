@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "FAQ Chat",
+    "slug": "rn-chat-llm",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.rnchatllm"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.example.rnchatllm"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-dev-client",
+      "expo-build-properties",
+      [
+        "llama.rn",
+        {
+          "enableOpenCLAndHexagon": true
+        }
+      ]
+    ],
+    "scheme": "rnchatllm"
+  }
+}
