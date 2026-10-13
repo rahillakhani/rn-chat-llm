@@ -79,8 +79,13 @@ Why FAQ text is the default, measured with SmolLM2-135M and the app's exact prom
 
 - **App text** (buttons, messages, FAQ list) starts in the phone's language (Spanish if the phone is set to
   Spanish, otherwise English) and can be switched with the **EN | ES** toggle in the chat header.
-- **Answers** follow the language the question is typed in, whatever the toggle says. If a question has no
-  clear language (e.g. just "PayPal"), the toggle's language is used.
+- **Answers** follow the language the question is typed in, whatever the toggle says. The language is decided
+  in this order:
+  1. Spanish-only characters (¿ ¡ ñ á é í ó ú).
+  2. Word votes: common words ("como", "mi", "the", "how") plus words that appear in only one language's FAQ
+     text, so short accentless queries like "recuperar datos" or "envio gratis" are recognised as Spanish.
+  3. Which language's version of the matched FAQ the question was closer to in the vector search.
+  4. If still unclear (e.g. just "PayPal"), the toggle's language.
 
 ### How accurate is the matching?
 
@@ -93,7 +98,7 @@ questions ([`src/rag/__fixtures__/retrieval-eval.json`](src/rag/__fixtures__/ret
 | Right FAQ answered directly (top-1)                          | **90.4%** |
 | Right FAQ answered **or** offered as a button to tap         | **97.1%** |
 | Fully correct, incl. off-topic questions getting "no answer" | 88.3%     |
-| Language of the question detected correctly                  | 96.7%     |
+| Language of the question detected correctly                  | 100%      |
 | Off-topic questions shown suggestions instead of "no answer" | 2 of 16   |
 
 How we got there (same test set):

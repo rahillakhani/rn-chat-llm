@@ -3,7 +3,12 @@ import type { FaqDataset, FaqItem } from '../data/faqSchema';
 import type { FaqStore } from '../db/faqStore';
 import type { Lang } from '../i18n/lang';
 import type { Embedder, Generator } from '../llm/engine';
-import { detectLanguage } from './language';
+import {
+  buildLanguageVocabulary,
+  detectLanguage,
+  languageFromHits,
+  type LanguageVocabulary,
+} from './language';
 import { buildLexicalIndex, type LexicalIndex } from './lexical';
 import { buildRagMessages, sanitizeAnswer } from './prompt';
 import { DEFAULT_MATCH_SETTINGS, rankFaqs, selectMatch, type MatchSettings } from './ranking';
@@ -14,6 +19,7 @@ export type BotDeps = {
   /** The optional LLM. null = search only: answers are always the FAQ text. */
   generator: Generator | null;
   lexical: LexicalIndex;
+  vocabulary: LanguageVocabulary;
 };
 
 /**
@@ -45,7 +51,7 @@ export async function prepareIndex(
   dataset: FaqDataset,
   embeddingModel: EmbeddingModelSpec,
   onProgress: (done: number, total: number) => void,
-): Promise<LexicalIndex> {
+): Promise<{ lexical: LexicalIndex; vocabulary: LanguageVocabulary }> {
   await store.seed(dataset);
   const texts = await store.searchTexts();
   const signature = { datasetVersion: dataset.version, embeddingModelId: embeddingModel.id };
@@ -57,7 +63,7 @@ export async function prepareIndex(
     }
     await store.replaceEmbeddings(rows, signature);
   }
-  return buildLexicalIndex(texts);
+  return { lexical: buildLexicalIndex(texts), vocabulary: buildLanguageVocabulary(texts) };
 }
 
 /**
@@ -73,12 +79,14 @@ export async function answerQuestion(
   onToken: (partial: string) => void,
   settings: MatchSettings = DEFAULT_MATCH_SETTINGS,
 ): Promise<BotAnswer> {
-  const lang = detectLanguage(question) ?? uiLang;
   const hits = await deps.store.search(await deps.embedder.embed(question));
-  const decision = selectMatch(
-    rankFaqs(hits, deps.lexical, question, settings.keywordWeight),
-    settings,
-  );
+  const ranked = rankFaqs(hits, deps.lexical, question, settings.keywordWeight);
+  const decision = selectMatch(ranked, settings);
+  const top = ranked[0];
+  const lang =
+    detectLanguage(question, deps.vocabulary) ??
+    (top ? languageFromHits(hits, top.faqId) : undefined) ??
+    uiLang;
   if (decision.kind === 'NO_MATCH') return { kind: 'NO_MATCH', lang };
   if (decision.kind === 'SUGGEST') {
     const options = await deps.store.getItems(

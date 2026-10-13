@@ -129,9 +129,9 @@ const settings: MatchSettings = {
 
 async function setup(reply = 'LLM answer') {
   const store = memoryStore();
-  const lexical = await prepareIndex(store, fakeEmbedder, dataset, embeddingModel, () => {});
+  const index = await prepareIndex(store, fakeEmbedder, dataset, embeddingModel, () => {});
   const generator = fakeGenerator(reply);
-  const deps: BotDeps = { store, embedder: fakeEmbedder, generator, lexical };
+  const deps: BotDeps = { store, embedder: fakeEmbedder, generator, ...index };
   return { store, generator, deps };
 }
 
@@ -214,10 +214,27 @@ describe('answerQuestion', () => {
     expect(generator.prompts).toHaveLength(0);
   });
 
-  it('uses the UI language when the question has no language hints', async () => {
+  it('answers in Spanish for a short accentless Spanish query, even with the app in English', async () => {
+    // Regression: "recuperar datos" was answered in English. Words that only occur in the
+    // Spanish FAQ text now count as Spanish.
     const { deps } = await setup();
-    const answer = await answerQuestion('refund', 'es', 'llm', deps, () => {}, settings);
+    const answer = await answerQuestion('reembolso', 'en', 'faq', deps, () => {}, settings);
     expect(answer).toMatchObject({ kind: 'ANSWER', lang: 'es', text: 'En 5 días hábiles.' });
+  });
+
+  it('uses the UI language when neither the words nor the search can tell the language', async () => {
+    const { deps } = await setup();
+    const answer = await answerQuestion('reembolso refund', 'es', 'faq', deps, () => {}, settings);
+    expect(answer).toMatchObject({ kind: 'ANSWER', lang: 'es', text: 'En 5 días hábiles.' });
+    const inEnglish = await answerQuestion(
+      'reembolso refund',
+      'en',
+      'faq',
+      deps,
+      () => {},
+      settings,
+    );
+    expect(inEnglish).toMatchObject({ kind: 'ANSWER', lang: 'en' });
   });
 
   it('offers close runners-up as related questions in the reply language', async () => {

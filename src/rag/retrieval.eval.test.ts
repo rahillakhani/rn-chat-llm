@@ -5,7 +5,7 @@ import faqJson from '../data/faq.json';
 import { FaqDatasetSchema, searchTexts } from '../data/faqSchema';
 import type { Lang } from '../i18n/lang';
 import evalJson from './__fixtures__/retrieval-eval.json';
-import { detectLanguage } from './language';
+import { buildLanguageVocabulary, detectLanguage, languageFromHits } from './language';
 import { buildLexicalIndex } from './lexical';
 import { DEFAULT_MATCH_SETTINGS, rankFaqs, selectMatch, type VectorHit } from './ranking';
 import { cosineSimilarity } from './vector';
@@ -47,6 +47,7 @@ describe.skipIf(!BASE_URL)('retrieval accuracy (live embeddings)', () => {
     const texts = dataset.items.flatMap(searchTexts);
     const vectors = await Promise.all(texts.map((t) => embed(t.text)));
     const lexical = buildLexicalIndex(texts);
+    const vocabulary = buildLanguageVocabulary(texts);
 
     let top1 = 0;
     let answeredOrSuggested = 0;
@@ -71,7 +72,12 @@ describe.skipIf(!BASE_URL)('retrieval accuracy (live embeddings)', () => {
       }));
       const ranked = rankFaqs(hits, lexical, c.query, DEFAULT_MATCH_SETTINGS.keywordWeight);
       const decision = selectMatch(ranked);
-      const lang: Lang = detectLanguage(c.query) ?? 'en';
+      const top = ranked[0];
+      // Same order as the app; 'en' stands in for the UI language.
+      const lang: Lang =
+        detectLanguage(c.query, vocabulary) ??
+        (top ? languageFromHits(hits, top.faqId) : undefined) ??
+        'en';
       if (lang === c.lang) langOk++;
       if (c.expectedId !== null) {
         outcomes[c.lang][decision.kind]++;
@@ -118,7 +124,7 @@ describe.skipIf(!BASE_URL)('retrieval accuracy (live embeddings)', () => {
     expect(report.top1).toBeGreaterThanOrEqual(0.88);
     expect(report.answeredOrSuggested).toBeGreaterThanOrEqual(0.95);
     expect(report.overall).toBeGreaterThanOrEqual(0.86);
-    expect(report.language).toBeGreaterThanOrEqual(0.95);
+    expect(report.language).toBeGreaterThanOrEqual(0.98);
     expect(report.offTopicGivenSuggestions).toBeLessThanOrEqual(0.25);
   }, 120_000);
 });

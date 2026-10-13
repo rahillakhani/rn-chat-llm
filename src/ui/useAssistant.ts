@@ -91,10 +91,14 @@ export function useAssistant() {
       const dataset = FaqDatasetSchema.parse(faqJson);
       const store = openFaqStore(EMBEDDING_MODEL.dimensions);
       const embedder = await loadEmbedder(EMBEDDING_MODEL, modelFile(EMBEDDING_MODEL).uri);
-      const lexical = await prepareIndex(store, embedder, dataset, EMBEDDING_MODEL, (done, total) =>
-        setState({ status: 'INDEXING', done, total }),
+      const { lexical, vocabulary } = await prepareIndex(
+        store,
+        embedder,
+        dataset,
+        EMBEDDING_MODEL,
+        (done, total) => setState({ status: 'INDEXING', done, total }),
       );
-      runtime.current = { store, embedder, generator: null, lexical };
+      runtime.current = { store, embedder, generator: null, lexical, vocabulary };
       setState({ status: 'READY', backend: store.backend, faqCount: await store.count() });
 
       // Chat is usable now; bring up AI features in the background if the user downloaded them.
